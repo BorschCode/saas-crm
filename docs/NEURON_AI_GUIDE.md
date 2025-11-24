@@ -18,18 +18,30 @@ Neuron AI is a PHP framework for creating and orchestrating AI Agents. It allows
 
 ### Step 1: Set Up API Keys
 
-Add your AI provider API keys to your `.env` file:
+Add your AI provider API key to your `.env` file. **Choose one** (priority order: Gemini > Anthropic > OpenAI):
 
 ```env
-# For OpenAI
+# For Google Gemini (Recommended - Free tier available!)
+GEMINI_API_KEY=your-gemini-api-key-here
+
+# OR for OpenAI
 OPENAI_API_KEY=sk-your-api-key-here
 
-# For Anthropic Claude
+# OR for Anthropic Claude
 ANTHROPIC_API_KEY=your-anthropic-key-here
 
 # Optional: For monitoring with Inspector
 INSPECTOR_INGESTION_KEY=your-inspector-key
 ```
+
+#### 🎁 Get a Free Gemini API Key
+
+1. Go to [Google AI Studio](https://aistudio.google.com/apikey)
+2. Sign in with your Google account
+3. Click "Create API Key"
+4. Copy the key and add it to your `.env` file
+
+Gemini offers a generous free tier with high rate limits, making it perfect for development!
 
 ### Step 2: Create Your First Agent
 
