@@ -14,6 +14,17 @@ jobs:
   ci:
     runs-on: ubuntu-latest
 
+    services:
+      mongodb:
+        image: mongo:8
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -22,6 +33,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.4
+          extensions: mongodb
           tools: composer:v2
           coverage: xdebug
 
@@ -40,11 +52,21 @@ jobs:
       - name: Copy Environment File
         run: cp .env.example .env
 
+      - name: Configure MongoDB Environment
+        run: |
+          echo "DB_CONNECTION=mongodb" >> .env
+          echo "DB_HOST=127.0.0.1" >> .env
+          echo "DB_PORT=27017" >> .env
+          echo "DB_DATABASE=testing" >> .env
+
       - name: Generate Application Key
         run: php artisan key:generate
 
       - name: Build Assets
         run: npm run build
+
+      - name: Run Migrations
+        run: php artisan migrate --force
 
       - name: Tests
         run: ./vendor/bin/pest
