@@ -11,37 +11,7 @@ withDefaults(
     },
 );
 
-const features = [
-    {
-        title: 'Multi-tenancy with Teams',
-        description: 'Full team-based isolation for SaaS architecture',
-        icon: '👥'
-    },
-    {
-        title: 'CRM System',
-        description: 'Complete customer relationship management with clients, contacts, and deal pipeline',
-        icon: '🤝'
-    },
-    {
-        title: 'Project Management',
-        description: 'Comprehensive project tracking with budgets, tasks, and time tracking',
-        icon: '📊'
-    },
-    {
-        title: 'AI Integration',
-        description: 'Neuron AI for automated task generation and smart notifications',
-        icon: '🤖'
-    }
-];
 
-const techStack = [
-    { name: 'Laravel 12', color: 'bg-red-500' },
-    { name: 'FilamentPHP v3', color: 'bg-yellow-500' },
-    { name: 'MongoDB 7.0', color: 'bg-green-500' },
-    { name: 'Vue.js 3', color: 'bg-green-400' },
-    { name: 'Inertia.js', color: 'bg-purple-500' },
-    { name: 'Tailwind CSS', color: 'bg-blue-500' }
-];
 </script>
 
 <template>
