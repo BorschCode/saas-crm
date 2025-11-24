@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('current_team_id')->nullable()->after('id')->constrained('teams')->nullOnDelete();
-            $table->string('avatar')->nullable()->after('email');
-            $table->string('phone')->nullable()->after('avatar');
-            $table->string('job_title')->nullable()->after('phone');
+            $table->foreignId('current_team_id')->nullable();
+            $table->string('avatar')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('job_title')->nullable();
         });
     }
 
@@ -25,7 +25,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['current_team_id']);
             $table->dropColumn(['current_team_id', 'avatar', 'phone', 'job_title']);
         });
     }

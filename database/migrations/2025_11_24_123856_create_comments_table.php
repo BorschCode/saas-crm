@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('team_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->morphs('commentable');
+            $table->string('commentable_type');
+            $table->unsignedBigInteger('commentable_id');
             $table->text('content');
             $table->foreignId('parent_id')->nullable()->constrained('comments')->cascadeOnDelete();
             $table->timestamps();

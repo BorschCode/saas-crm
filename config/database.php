@@ -112,6 +112,17 @@ return [
             // 'encrypt' => env('DB_ENCRYPT', 'yes'),
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
+        'mongodb' => [
+            'driver' => 'mongodb',
+            'host' => env('DB_HOST', 'mongodb'),
+            'port' => env('DB_PORT', 27017),
+            'database' => env('DB_DATABASE', 'filament'),
+            'username' => env('DB_USERNAME', 'filament'),
+            'password' => env('DB_PASSWORD', 'filamentpassword'),
+            'options' => [
+                'authSource' => 'admin',
+            ],
+        ],
 
     ],
 
