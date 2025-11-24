@@ -117,11 +117,11 @@ return [
             'host' => env('DB_HOST', 'mongodb'),
             'port' => env('DB_PORT', 27017),
             'database' => env('DB_DATABASE', 'filament'),
-            'username' => env('DB_USERNAME', 'filament'),
-            'password' => env('DB_PASSWORD', 'filamentpassword'),
-            'options' => [
-                'authSource' => 'admin',
-            ],
+            'username' => env('DB_USERNAME'),
+            'password' => env('DB_PASSWORD'),
+            'options' => array_filter([
+                'authSource' => env('DB_USERNAME') ? 'admin' : null,
+            ]),
         ],
 
     ],
