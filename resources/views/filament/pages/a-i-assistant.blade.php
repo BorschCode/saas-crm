@@ -1,11 +1,6 @@
 <x-filament-panels::page>
     <div class="space-y-6">
-        @php
-            $neuronAI = app(\App\Services\NeuronAIService::class);
-            $isConfigured = $neuronAI->isConfigured();
-        @endphp
-
-        @if (!$isConfigured)
+        @if (!$this->isConfigured)
             <x-filament::section>
                 <x-slot name="heading">
                     Configuration Required
@@ -27,7 +22,7 @@
                 </x-slot>
                 <div class="text-sm">
                     <p class="text-success-600 dark:text-success-400">
-                        ✓ {{ $neuronAI->getConfigurationMessage() }}
+                        ✓ {{ $this->configurationMessage }}
                     </p>
                 </div>
             </x-filament::section>
@@ -42,7 +37,7 @@
                 {{ $this->form }}
 
                 <div class="flex gap-3">
-                    <x-filament::button type="submit" :disabled="!$isConfigured">
+                    <x-filament::button type="submit" :disabled="!$this->isConfigured">
                         Analyze Task
                     </x-filament::button>
 
