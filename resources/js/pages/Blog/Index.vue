@@ -2,7 +2,7 @@
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 interface Category {
     id: number;
@@ -57,7 +57,23 @@ const props = defineProps<{
     popularTags: Tag[];
     currentCategory?: Category;
     currentTag?: Tag;
+    searchQuery?: string;
 }>();
+
+const search = ref(props.searchQuery || '');
+
+const handleSearch = () => {
+    router.get(
+        '/blog',
+        { search: search.value || undefined },
+        { preserveState: true, preserveScroll: true }
+    );
+};
+
+const clearSearch = () => {
+    search.value = '';
+    router.get('/blog', {}, { preserveState: true, preserveScroll: true });
+};
 
 const breadcrumbs = computed<BreadcrumbItem[]>(() => {
     const items: BreadcrumbItem[] = [
@@ -122,6 +138,58 @@ const formatDate = (dateString: string) => {
                     class="text-sidebar-foreground/70"
                 >
                     {{ currentCategory.description }}
+                </p>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="relative">
+                <form @submit.prevent="handleSearch" class="relative">
+                    <input
+                        v-model="search"
+                        type="text"
+                        placeholder="Search posts..."
+                        class="w-full rounded-xl border border-sidebar-border/70 bg-background px-4 py-3 pl-11 pr-11 text-sidebar-foreground placeholder:text-sidebar-foreground/50 focus:border-sidebar-accent-foreground focus:outline-none focus:ring-2 focus:ring-sidebar-accent-foreground/20 dark:border-sidebar-border"
+                        @input="handleSearch"
+                    />
+                    <svg
+                        class="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-sidebar-foreground/50"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                        />
+                    </svg>
+                    <button
+                        v-if="search"
+                        type="button"
+                        @click="clearSearch"
+                        class="absolute right-4 top-1/2 -translate-y-1/2 text-sidebar-foreground/50 hover:text-sidebar-foreground"
+                    >
+                        <svg
+                            class="h-5 w-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"
+                            />
+                        </svg>
+                    </button>
+                </form>
+                <p
+                    v-if="searchQuery"
+                    class="mt-2 text-sm text-sidebar-foreground/70"
+                >
+                    Showing results for "{{ searchQuery }}"
                 </p>
             </div>
 

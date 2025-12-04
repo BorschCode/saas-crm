@@ -188,3 +188,50 @@ test('tag model counts posts correctly', function () {
 
     expect($tag->posts()->count())->toBe(2);
 });
+
+test('blog search filters posts by search query', function () {
+    $searchablePost = Post::factory()->published()->create([
+        'user_id' => $this->user->id,
+        'category_id' => $this->category->id,
+        'title' => 'Laravel Testing Best Practices',
+        'excerpt' => 'Learn how to test Laravel applications effectively',
+        'content' => 'This is a comprehensive guide about Laravel testing',
+    ]);
+
+    $otherPost = Post::factory()->published()->create([
+        'user_id' => $this->user->id,
+        'category_id' => $this->category->id,
+        'title' => 'Vue.js Components Guide',
+        'excerpt' => 'Building components in Vue.js',
+        'content' => 'This guide covers Vue.js component development',
+    ]);
+
+    // Index the posts for search
+    $searchablePost->searchable();
+    $otherPost->searchable();
+
+    get(route('blog.index', ['search' => 'Laravel']))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('Blog/Index')
+            ->where('searchQuery', 'Laravel')
+            ->has('posts.data', 1)
+            ->where('posts.data.0.id', $searchablePost->id));
+});
+
+test('blog search returns empty results for no matches', function () {
+    $post = Post::factory()->published()->create([
+        'user_id' => $this->user->id,
+        'category_id' => $this->category->id,
+        'title' => 'Vue.js Guide',
+    ]);
+
+    $post->searchable();
+
+    get(route('blog.index', ['search' => 'NonExistentTerm']))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('Blog/Index')
+            ->where('searchQuery', 'NonExistentTerm')
+            ->has('posts.data', 0));
+});

@@ -12,13 +12,28 @@ class BlogController extends Controller
 {
     public function index(): Response
     {
-        $posts = Post::query()
-            ->with(['category', 'user', 'tags'])
-            ->where('is_published', true)
-            ->whereNotNull('published_at')
-            ->where('published_at', '<=', now())
-            ->latest('published_at')
-            ->paginate(12);
+        $searchQuery = request('search');
+
+        if ($searchQuery) {
+            // Use Scout search when a search query is present
+            $posts = Post::search($searchQuery)
+                ->query(fn ($query) => $query
+                    ->with(['category', 'user', 'tags'])
+                    ->where('is_published', true)
+                    ->whereNotNull('published_at')
+                    ->where('published_at', '<=', now())
+                )
+                ->paginate(12);
+        } else {
+            // Normal query when no search
+            $posts = Post::query()
+                ->with(['category', 'user', 'tags'])
+                ->where('is_published', true)
+                ->whereNotNull('published_at')
+                ->where('published_at', '<=', now())
+                ->latest('published_at')
+                ->paginate(12);
+        }
 
         $categories = Category::all()->map(function ($category) {
             $category->posts_count = Post::where('category_id', $category->id)->count();
@@ -36,6 +51,7 @@ class BlogController extends Controller
             'posts' => $posts,
             'categories' => $categories,
             'popularTags' => $popularTags,
+            'searchQuery' => $searchQuery,
         ]);
     }
 
@@ -116,7 +132,7 @@ class BlogController extends Controller
         $perPage = 12;
         $currentPage = request()->get('page', 1);
         $posts = new \Illuminate\Pagination\LengthAwarePaginator(
-            $allPosts->forPage($currentPage, $perPage),
+            $allPosts->forPage($currentPage, $perPage)->values(),
             $allPosts->count(),
             $perPage,
             $currentPage,
