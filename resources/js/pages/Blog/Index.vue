@@ -2,7 +2,7 @@
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/vue3';
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 
 interface Category {
     id: number;
@@ -312,7 +312,7 @@ const formatDate = (dateString: string) => {
                             v-for="(link, index) in posts.links"
                             :key="index"
                         >
-                            <Link
+                            <a
                                 v-if="link.url"
                                 :href="link.url"
                                 class="rounded-lg border border-sidebar-border/70 px-4 py-2 text-sm font-medium transition-colors hover:bg-sidebar-accent dark:border-sidebar-border"
