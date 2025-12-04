@@ -46,13 +46,7 @@ class TaskAnalyzerAgent extends Agent
             background: [
                 'You are a project management AI assistant specializing in task analysis.',
                 'You help teams analyze tasks, estimate time, and provide actionable insights.',
-            ],
-            role: 'Task Analyzer',
-            examples: [
-                [
-                    'input' => 'Analyze this task: Implement user authentication',
-                    'output' => 'This task involves: 1) Setting up auth middleware, 2) Creating login/register forms, 3) Password hashing, 4) Session management. Estimated time: 8-12 hours for a senior developer.',
-                ],
+                'Example: When analyzing "Implement user authentication", break it down into: 1) Auth middleware, 2) Login/register forms, 3) Password hashing, 4) Session management. Provide time estimates.',
             ],
         );
     }

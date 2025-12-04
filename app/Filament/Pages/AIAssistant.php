@@ -30,9 +30,19 @@ class AIAssistant extends Page implements HasForms
 
     public bool $isLoading = false;
 
-    public function mount(): void
+    protected function getNeuronAI(): NeuronAIService
     {
-        $this->form->fill();
+        return app(NeuronAIService::class);
+    }
+
+    public function getIsConfiguredProperty(): bool
+    {
+        return $this->getNeuronAI()->isConfigured();
+    }
+
+    public function getConfigurationMessageProperty(): string
+    {
+        return $this->getNeuronAI()->getConfigurationMessage();
     }
 
     public function form(Form $form): Form
@@ -62,9 +72,7 @@ class AIAssistant extends Page implements HasForms
             return;
         }
 
-        $neuronAI = app(NeuronAIService::class);
-
-        if (! $neuronAI->isConfigured()) {
+        if (! $this->getNeuronAI()->isConfigured()) {
             Notification::make()
                 ->title('AI Not Configured')
                 ->body('Please set OPENAI_API_KEY or ANTHROPIC_API_KEY in your .env file.')
@@ -77,7 +85,7 @@ class AIAssistant extends Page implements HasForms
         $this->isLoading = true;
 
         try {
-            $result = $neuronAI->analyzeTask($data['taskDescription']);
+            $result = $this->getNeuronAI()->analyzeTask($data['taskDescription']);
 
             if ($result['success']) {
                 $this->aiResponse = $result['content'];

@@ -4,6 +4,7 @@
 [![PHP Version](https://img.shields.io/badge/PHP-8.4-777BB4?logo=php&logoColor=white)](https://php.net)
 [![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?logo=laravel&logoColor=white)](https://laravel.com)
 [![FilamentPHP](https://img.shields.io/badge/Filament-v3-FDAE4B?logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMiAxMkwxMiAyMkwyMiAxMkwxMiAyWiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+&logoColor=white)](https://filamentphp.com)
+[![Laravel Scout](https://img.shields.io/badge/Laravel_Scout-10.22-FF2D20?logo=laravel&logoColor=white)](https://laravel.com/docs/scout)
 [![MongoDB](https://img.shields.io/badge/MongoDB-7.0-47A248?logo=mongodb&logoColor=white)](https://mongodb.com)
 [![Node.js](https://img.shields.io/badge/Node.js-22-339933?logo=node.js&logoColor=white)](https://nodejs.org)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.0-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
@@ -40,6 +41,14 @@ A comprehensive Laravel 12 + FilamentPHP v3 + Neuron AI application demonstratin
 ![AI Chat Error](docs/chat%20with%20ai%20fail.png)
 *AI chat system with proper error handling and user feedback*
 
+### Blog System
+![Blog](docs/blog.png)
+*Full-featured blog with categories, tags, and post management*
+
+### Blog Search
+![Blog Search](docs/blog-search.png)
+*Real-time search functionality powered by Laravel Scout*
+
 ## 🚀 Features
 
 ### Core Features
@@ -54,6 +63,13 @@ A comprehensive Laravel 12 + FilamentPHP v3 + Neuron AI application demonstratin
     - Task management with subtasks
     - Time tracking and billing
     - Project-client associations
+- **Blog System**: Full-featured content management
+    - Posts with categories and tags
+    - Rich text editor with featured images
+    - Real-time search powered by Laravel Scout
+    - Published/draft status management
+    - SEO-friendly slugs
+    - Related posts recommendations
 - **Advanced Features**:
     - Comments system (polymorphic for all entities)
     - Role-based permissions within teams
@@ -64,6 +80,7 @@ A comprehensive Laravel 12 + FilamentPHP v3 + Neuron AI application demonstratin
 - **Backend**: Laravel 12.39.0 with PHP 8.4
 - **Admin Panel**: FilamentPHP v3.3.45
 - **AI Integration**: Neuron AI v2.8.11
+- **Search**: Laravel Scout v10.22 with collection driver
 - **Database**: MongoDB 7.0 with Laravel MongoDB driver
 - **Frontend**:
   - Inertia.js v2 with Vue.js 3
@@ -127,6 +144,12 @@ vendor/bin/sail npm run build
 - `time_entries`: Time tracking for billing
 - `comments`: Universal commenting system
 
+### Blog Module
+- `posts`: Blog posts with content and metadata
+- `categories`: Post categories for organization
+- `tags`: Tags for flexible content classification
+- `post_tag`: Many-to-many relationship between posts and tags
+
 ## 🎯 Key Models & Relationships
 
 ### Team Model
@@ -156,6 +179,21 @@ vendor/bin/sail npm run build
 - Tracks sales pipeline stages
 - Currency and probability tracking
 
+### Post Model
+- Belongs to: User, Category
+- Many-to-many relationship with Tags
+- Searchable via Laravel Scout
+- Supports published/draft status
+- Featured images and rich content
+
+### Category Model
+- Has many Posts
+- Used for primary post organization
+
+### Tag Model
+- Many-to-many relationship with Posts
+- Flexible content classification
+
 ## 🔧 Filament Resources
 
 All major entities have Filament admin resources:
@@ -166,6 +204,9 @@ All major entities have Filament admin resources:
 - TaskResource
 - TimeEntryResource
 - TeamResource
+- PostResource
+- CategoryResource
+- TagResource
 
 ## 🤖 Neuron AI Integration
 
@@ -219,6 +260,51 @@ The database is seeded with:
 - 15 Projects
 - 75-225 Tasks
 - Multiple Deals per client
+- 30 Blog posts with categories and tags
+- 5 Blog categories
+- 15 Blog tags
+
+## 📝 Blog & Search System
+
+### Features
+The blog system includes:
+- **Content Management**: Create, edit, and publish blog posts via Filament admin
+- **Categories & Tags**: Organize posts with categories and flexible tagging
+- **Search Functionality**: Real-time search powered by Laravel Scout
+- **SEO Optimized**: Automatic slug generation and meta data support
+- **Rich Media**: Support for featured images with dynamic loading from `public/img/`
+- **Draft System**: Publish/unpublish posts with scheduled publishing dates
+
+### Accessing the Blog
+- **Frontend**: Navigate to `/blog` to view all published posts
+- **Admin Panel**: Manage posts at `/admin/posts`, categories at `/admin/categories`, and tags at `/admin/tags`
+
+### Search Capabilities
+The search feature allows users to find posts by:
+- Post titles
+- Excerpt content
+- Full post content
+
+Search results update automatically as you type, providing instant feedback.
+
+### Managing Images
+The PostFactory automatically discovers and uses images from:
+- `public/img/*.{png,jpg,jpeg,gif,webp}` - Main images
+- `public/img/svg/*.svg` - SVG graphics
+
+Simply add new images to these directories and they'll be automatically used in generated blog posts.
+
+### Indexing Posts for Search
+When adding new posts programmatically, index them for search:
+```bash
+# Index all posts
+vendor/bin/sail artisan scout:import "App\Models\Post"
+
+# Flush search index (if needed)
+vendor/bin/sail artisan scout:flush "App\Models\Post"
+```
+
+Posts created through the Filament admin panel are automatically indexed.
 
 ## 🚀 Development Commands
 
@@ -367,7 +453,10 @@ app/
 │   ├── Project.php
 │   ├── Task.php
 │   ├── TimeEntry.php
-│   └── Comment.php
+│   ├── Comment.php
+│   ├── Post.php
+│   ├── Category.php
+│   └── Tag.php
 ├── Filament/
 │   └── Resources/         # Filament admin resources
 │       ├── ClientResource.php
@@ -376,11 +465,23 @@ app/
 │       ├── ProjectResource.php
 │       ├── TaskResource.php
 │       ├── TimeEntryResource.php
-│       └── TeamResource.php
+│       ├── TeamResource.php
+│       ├── PostResource.php
+│       ├── CategoryResource.php
+│       └── TagResource.php
+├── Http/
+│   └── Controllers/
+│       └── BlogController.php  # Frontend blog controller
 database/
 ├── migrations/            # Database migrations
-├── factories/            # Model factories
+├── factories/            # Model factories (with dynamic image loading)
 └── seeders/              # Database seeders
+resources/
+└── js/
+    └── pages/
+        └── Blog/         # Inertia.js blog pages
+            ├── Index.vue # Blog listing with search
+            └── Show.vue  # Single post view
 ```
 
 ## 🎨 Customization
@@ -424,6 +525,7 @@ vendor/bin/sail artisan make:filament-resource YourModel --generate --no-interac
 
 - [Laravel Documentation](https://laravel.com/docs)
 - [FilamentPHP Documentation](https://filamentphp.com/docs)
+- [Laravel Scout Documentation](https://laravel.com/docs/scout)
 - [Laravel MongoDB Documentation](https://github.com/mongodb/laravel-mongodb)
 - [MongoDB Documentation](https://www.mongodb.com/docs/)
 - [Inertia.js Documentation](https://inertiajs.com/)
