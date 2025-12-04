@@ -15,13 +15,19 @@ class AIAssistant extends Page implements HasForms
     use InteractsWithForms;
 
     protected static ?string $navigationIcon = 'heroicon-o-sparkles';
+
     protected static string $view = 'filament.pages.a-i-assistant';
+
     protected static ?string $navigationGroup = 'Tools';
+
     protected static ?string $title = 'AI Task Analyzer';
+
     protected static ?int $navigationSort = 100;
 
     public ?string $taskDescription = '';
+
     public ?string $aiResponse = null;
+
     public bool $isLoading = false;
 
     protected function getNeuronAI(): NeuronAIService
@@ -107,4 +113,3 @@ class AIAssistant extends Page implements HasForms
         $this->form->fill();
     }
 }
-

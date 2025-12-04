@@ -22,7 +22,7 @@ class PostFactory extends Factory
             'user_id' => \App\Models\User::factory(),
             'category_id' => \App\Models\Category::factory(),
             'title' => $title,
-            'slug' => str($title)->slug(),
+            'slug' => str($title)->slug().'-'.fake()->unique()->numberBetween(1000, 9999),
             'excerpt' => fake()->paragraph(),
             'content' => fake()->paragraphs(5, true),
             'featured_image' => fake()->imageUrl(1200, 630),

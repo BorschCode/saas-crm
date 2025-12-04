@@ -20,8 +20,17 @@ class BlogController extends Controller
             ->latest('published_at')
             ->paginate(12);
 
-        $categories = Category::withCount('posts')->get();
-        $popularTags = Tag::withCount('posts')->orderBy('posts_count', 'desc')->limit(10)->get();
+        $categories = Category::all()->map(function ($category) {
+            $category->posts_count = Post::where('category_id', $category->id)->count();
+
+            return $category;
+        });
+
+        $popularTags = Tag::all()->map(function ($tag) {
+            $tag->posts_count = $tag->posts()->count();
+
+            return $tag;
+        })->sortByDesc('posts_count')->take(10)->values();
 
         return Inertia::render('Blog/Index', [
             'posts' => $posts,
@@ -69,8 +78,17 @@ class BlogController extends Controller
             ->latest('published_at')
             ->paginate(12);
 
-        $categories = Category::withCount('posts')->get();
-        $popularTags = Tag::withCount('posts')->orderBy('posts_count', 'desc')->limit(10)->get();
+        $categories = Category::all()->map(function ($category) {
+            $category->posts_count = Post::where('category_id', $category->id)->count();
+
+            return $category;
+        });
+
+        $popularTags = Tag::all()->map(function ($tag) {
+            $tag->posts_count = $tag->posts()->count();
+
+            return $tag;
+        })->sortByDesc('posts_count')->take(10)->values();
 
         return Inertia::render('Blog/Index', [
             'posts' => $posts,
@@ -84,17 +102,38 @@ class BlogController extends Controller
     {
         $tag = Tag::where('slug', $slug)->firstOrFail();
 
-        $posts = Post::query()
+        // For MongoDB, get all tag's posts and manually paginate
+        $allPosts = Post::query()
             ->with(['category', 'user', 'tags'])
-            ->whereHas('tags', fn ($query) => $query->where('slug', $slug))
             ->where('is_published', true)
             ->whereNotNull('published_at')
             ->where('published_at', '<=', now())
             ->latest('published_at')
-            ->paginate(12);
+            ->get()
+            ->filter(fn ($post) => $post->tags->contains('id', $tag->id));
 
-        $categories = Category::withCount('posts')->get();
-        $popularTags = Tag::withCount('posts')->orderBy('posts_count', 'desc')->limit(10)->get();
+        // Manual pagination
+        $perPage = 12;
+        $currentPage = request()->get('page', 1);
+        $posts = new \Illuminate\Pagination\LengthAwarePaginator(
+            $allPosts->forPage($currentPage, $perPage),
+            $allPosts->count(),
+            $perPage,
+            $currentPage,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+
+        $categories = Category::all()->map(function ($category) {
+            $category->posts_count = Post::where('category_id', $category->id)->count();
+
+            return $category;
+        });
+
+        $popularTags = Tag::all()->map(function ($tag) {
+            $tag->posts_count = $tag->posts()->count();
+
+            return $tag;
+        })->sortByDesc('posts_count')->take(10)->values();
 
         return Inertia::render('Blog/Index', [
             'posts' => $posts,

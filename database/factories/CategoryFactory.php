@@ -20,7 +20,7 @@ class CategoryFactory extends Factory
 
         return [
             'name' => $name,
-            'slug' => str($name)->slug(),
+            'slug' => str($name)->slug().'-'.fake()->unique()->numberBetween(100, 999),
             'description' => fake()->sentence(),
         ];
     }

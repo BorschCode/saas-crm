@@ -4,6 +4,7 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
 use App\Models\User;
+
 use function Pest\Laravel\get;
 
 beforeEach(function () {
@@ -168,9 +169,9 @@ test('category model counts posts correctly', function () {
         'category_id' => $this->category->id,
     ]);
 
-    $category = Category::withCount('posts')->find($this->category->id);
+    $category = Category::find($this->category->id);
 
-    expect($category->posts_count)->toBe(3);
+    expect($category->posts()->count())->toBe(3);
 });
 
 test('tag model counts posts correctly', function () {
@@ -183,7 +184,7 @@ test('tag model counts posts correctly', function () {
         $post->tags()->attach($this->tag);
     }
 
-    $tag = Tag::withCount('posts')->find($this->tag->id);
+    $tag = Tag::find($this->tag->id);
 
-    expect($tag->posts_count)->toBe(2);
+    expect($tag->posts()->count())->toBe(2);
 });
