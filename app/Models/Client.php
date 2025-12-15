@@ -38,6 +38,7 @@ use MongoDB\Laravel\Eloquent\Model;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Project> $projects
  * @property-read int|null $projects_count
  * @property-read \App\Models\Team|null $team
+ *
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Client addHybridHas(\Illuminate\Database\Eloquent\Relations\Relation $relation, string $operator = '>=', string $count = 1, string $boolean = 'and', ?\Closure $callback = null)
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Client aggregate($function = null, $columns = [])
  * @method static \Database\Factories\ClientFactory factory($count = null, $state = [])
@@ -71,6 +72,7 @@ use MongoDB\Laravel\Eloquent\Model;
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Client whereWebsite($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Client withTrashed(bool $withTrashed = true)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Client withoutTrashed()
+ *
  * @mixin \Eloquent
  */
 class Client extends Model

@@ -28,6 +28,7 @@ use MongoDB\Laravel\Eloquent\Model;
  * @property-read int|null $deals_count
  * @property-read string $full_name
  * @property-read \App\Models\Team|null $team
+ *
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Contact addHybridHas(\Illuminate\Database\Eloquent\Relations\Relation $relation, string $operator = '>=', string $count = 1, string $boolean = 'and', ?\Closure $callback = null)
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Contact aggregate($function = null, $columns = [])
  * @method static \Database\Factories\ContactFactory factory($count = null, $state = [])
@@ -57,6 +58,7 @@ use MongoDB\Laravel\Eloquent\Model;
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Contact whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Contact withTrashed(bool $withTrashed = true)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Contact withoutTrashed()
+ *
  * @mixin \Eloquent
  */
 class Contact extends Model
