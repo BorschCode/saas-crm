@@ -417,3 +417,39 @@ test('blog search maintains pagination', function () {
             ->has('posts.data', 3)
             ->where('posts.current_page', 2));
 });
+
+test('can export published post as PDF', function () {
+    $post = Post::factory()->published()->create([
+        'user_id' => $this->user->id,
+        'category_id' => $this->category->id,
+        'title' => 'Test Post for PDF Export',
+        'slug' => 'test-post-for-pdf-export',
+        'content' => 'This is the content of the test post.',
+    ]);
+
+    $response = get(route('posts.export-pdf', ['post' => $post->id]));
+
+    $response->assertOk()
+        ->assertHeader('content-type', 'application/pdf');
+
+    expect($response->headers->get('content-disposition'))
+        ->toContain('attachment')
+        ->toContain('filename')
+        ->toContain('.pdf');
+});
+
+test('cannot export draft post as PDF', function () {
+    $post = Post::factory()->draft()->create([
+        'user_id' => $this->user->id,
+        'category_id' => $this->category->id,
+        'title' => 'Draft Post',
+    ]);
+
+    get(route('posts.export-pdf', ['post' => $post->id]))
+        ->assertForbidden();
+});
+
+test('cannot export non-existent post as PDF', function () {
+    get(route('posts.export-pdf', ['post' => 'non-existent-id']))
+        ->assertNotFound();
+});

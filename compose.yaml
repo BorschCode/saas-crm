@@ -25,10 +25,10 @@ services:
             - mongodb
             - redis
     mongodb:
-        image: 'mongodb/mongodb-atlas-local:latest'
+        image: 'mongo:8.0'
         environment:
-            - 'MONGODB_INITDB_ROOT_USERNAME=${MONGODB_USERNAME:-}'
-            - 'MONGODB_INITDB_ROOT_PASSWORD=${MONGODB_PASSWORD:-}'
+            MONGO_INITDB_ROOT_USERNAME: '${MONGODB_USERNAME:-}'
+            MONGO_INITDB_ROOT_PASSWORD: '${MONGODB_PASSWORD:-}'
         volumes:
             - 'sail-mongodb:/data/db'
         ports:
@@ -39,7 +39,6 @@ services:
             test:
                 - CMD
                 - mongosh
-                - 'mongodb://localhost:27017/admin'
                 - '--eval=db.runCommand({ping:1})'
             retries: 3
             timeout: 5s

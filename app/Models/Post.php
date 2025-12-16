@@ -26,6 +26,7 @@ use MongoDB\Laravel\Eloquent\Model;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
  * @property-read int|null $tags_count
  * @property-read \App\Models\User|null $user
+ *
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Post addHybridHas(\Illuminate\Database\Eloquent\Relations\Relation $relation, string $operator = '>=', string $count = 1, string $boolean = 'and', ?\Closure $callback = null)
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Post aggregate($function = null, $columns = [])
  * @method static \Database\Factories\PostFactory factory($count = null, $state = [])
@@ -51,6 +52,7 @@ use MongoDB\Laravel\Eloquent\Model;
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Post whereTitle($value)
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Post whereUpdatedAt($value)
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Post whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class Post extends Model
@@ -73,6 +75,12 @@ class Post extends Model
         'featured_image',
         'is_published',
         'published_at',
+        'source_file_id',
+        'original_content',
+        'guest_session_id',
+        'parsing_state',
+        'parsing_error',
+        'parsing_completed_at',
     ];
 
     /**
@@ -85,6 +93,7 @@ class Post extends Model
         return [
             'is_published' => 'boolean',
             'published_at' => 'datetime',
+            'parsing_completed_at' => 'datetime',
         ];
     }
 
@@ -101,6 +110,36 @@ class Post extends Model
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class)->withTimestamps();
+    }
+
+    public function sourceFile(): BelongsTo
+    {
+        return $this->belongsTo(SourceFile::class, 'source_file_id');
+    }
+
+    public function scopeForSession($query, string $sessionId)
+    {
+        return $query->where('guest_session_id', $sessionId);
+    }
+
+    public function scopeOwnedByUser($query, int $userId)
+    {
+        return $query->where('user_id', $userId);
+    }
+
+    public function isGuestPost(): bool
+    {
+        return ! is_null($this->guest_session_id);
+    }
+
+    public function hasSourceFile(): bool
+    {
+        return ! is_null($this->source_file_id);
+    }
+
+    public function canRetryParsing(): bool
+    {
+        return $this->parsing_state === 'failed';
     }
 
     /**

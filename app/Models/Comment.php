@@ -17,6 +17,7 @@ use MongoDB\Laravel\Eloquent\Model;
  * @property-read int|null $replies_count
  * @property-read \App\Models\Team|null $team
  * @property-read \App\Models\User|null $user
+ *
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Comment addHybridHas(\Illuminate\Database\Eloquent\Relations\Relation $relation, string $operator = '>=', string $count = 1, string $boolean = 'and', ?\Closure $callback = null)
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Comment aggregate($function = null, $columns = [])
  * @method static \Database\Factories\CommentFactory factory($count = null, $state = [])
@@ -32,6 +33,7 @@ use MongoDB\Laravel\Eloquent\Model;
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Comment vectorSearch(string $index, string $path, array $queryVector, int $limit, bool $exact = false, \MongoDB\Builder\Type\QueryInterface|array $filter = [], ?int $numCandidates = null)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment withTrashed(bool $withTrashed = true)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment withoutTrashed()
+ *
  * @mixin \Eloquent
  */
 class Comment extends Model

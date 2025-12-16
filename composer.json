@@ -18,7 +18,9 @@
         "laravel/scout": "^10.22",
         "laravel/tinker": "^2.10.1",
         "laravel/wayfinder": "^0.1.9",
-        "neuron-core/neuron-ai": "^2.8"
+        "neuron-core/neuron-ai": "^2.8",
+        "smalot/pdfparser": "^2.12",
+        "spatie/laravel-pdf": "^1.8"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.16",
