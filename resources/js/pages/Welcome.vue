@@ -1,6 +1,5 @@
 <template>
     <div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-        <!-- Header -->
         <header class="bg-white shadow-sm border-b border-gray-200">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                 <div class="flex justify-between items-center">
@@ -27,9 +26,7 @@
             </div>
         </header>
 
-        <!-- Main Content -->
         <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <!-- Hero Section -->
             <div class="text-center mb-16">
                 <h2 class="text-4xl font-extrabold text-gray-900 mb-4">
                     Everything You Need to Run Your Business
@@ -39,9 +36,7 @@
                 </p>
             </div>
 
-            <!-- Feature Blocks -->
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-                <!-- Blog -->
                 <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow p-6 border border-gray-100">
                     <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
                         <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -57,7 +52,6 @@
                     </div>
                 </div>
 
-                <!-- File Upload to Blog -->
                 <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow p-6 border border-gray-100">
                     <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
                         <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -73,7 +67,6 @@
                     </div>
                 </div>
 
-                <!-- Admin Panel -->
                 <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow p-6 border border-gray-100">
                     <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
                         <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -90,7 +83,6 @@
                     </div>
                 </div>
 
-                <!-- Dashboard -->
                 <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow p-6 border border-gray-100">
                     <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
                         <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -106,7 +98,6 @@
                     </div>
                 </div>
 
-                <!-- Settings -->
                 <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow p-6 border border-gray-100">
                     <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mb-4">
                         <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -122,7 +113,6 @@
                     </div>
                 </div>
 
-                <!-- Authentication -->
                 <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow p-6 border border-gray-100">
                     <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
                         <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -145,7 +135,6 @@
                 </div>
             </div>
 
-            <!-- Key Features -->
             <div class="bg-white rounded-xl shadow-lg p-8 border border-gray-200">
                 <h3 class="text-2xl font-bold text-gray-900 mb-6">Platform Capabilities</h3>
                 <div class="grid md:grid-cols-2 gap-6">
@@ -222,7 +211,6 @@
                 </div>
             </div>
 
-            <!-- Tech Stack -->
             <div class="mt-12 text-center">
                 <h3 class="text-lg font-semibold text-gray-900 mb-4">Built With Modern Technology</h3>
                 <div class="flex flex-wrap justify-center gap-4 text-sm text-gray-600">
@@ -238,7 +226,6 @@
             </div>
         </main>
 
-        <!-- Footer -->
         <footer class="bg-white border-t border-gray-200 mt-16">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <p class="text-center text-gray-600">
@@ -249,7 +236,7 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 defineProps({
     canRegister: Boolean,
 });
