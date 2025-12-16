@@ -16,12 +16,23 @@ class CategoryFactory extends Factory
      */
     public function definition(): array
     {
-        $name = fake()->words(2, true);
+        $categories = [
+            ['name' => 'Technology', 'description' => 'Latest trends in software development, AI, and digital innovation'],
+            ['name' => 'Business', 'description' => 'Entrepreneurship, startup insights, and business strategy'],
+            ['name' => 'Design', 'description' => 'UI/UX design, creative trends, and visual storytelling'],
+            ['name' => 'Marketing', 'description' => 'Digital marketing strategies, SEO, and content creation'],
+            ['name' => 'Productivity', 'description' => 'Tips and tools to boost your efficiency and workflow'],
+            ['name' => 'Career', 'description' => 'Professional development and career advancement advice'],
+            ['name' => 'Lifestyle', 'description' => 'Work-life balance, wellness, and personal growth'],
+            ['name' => 'Innovation', 'description' => 'Cutting-edge ideas and breakthrough technologies'],
+        ];
+
+        $category = fake()->unique()->randomElement($categories);
 
         return [
-            'name' => $name,
-            'slug' => str($name)->slug().'-'.fake()->unique()->numberBetween(100, 999),
-            'description' => fake()->sentence(),
+            'name' => $category['name'],
+            'slug' => str($category['name'])->slug(),
+            'description' => $category['description'],
         ];
     }
 }

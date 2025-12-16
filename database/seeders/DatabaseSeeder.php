@@ -14,22 +14,23 @@ use App\Models\Team;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
         $admin = User::factory()->create([
-            'name' => 'Admin User',
+            'name' => 'Sarah Johnson',
             'email' => 'admin@example.com',
             'password' => Hash::make('password'),
-            'job_title' => 'System Administrator',
+            'job_title' => 'CEO & Founder',
         ]);
 
         $team = Team::create([
-            'name' => 'Acme Corporation',
-            'slug' => 'acme-corp',
-            'description' => 'Main company team',
+            'name' => 'TechVenture Solutions',
+            'slug' => 'techventure',
+            'description' => 'Innovative software development and digital transformation company',
             'owner_id' => $admin->id,
             'is_active' => true,
         ]);
@@ -37,8 +38,19 @@ class DatabaseSeeder extends Seeder
         $admin->update(['current_team_id' => $team->id]);
         $admin->teams()->attach($team->id, ['role' => 'admin']);
 
-        $users = User::factory(5)->create();
-        foreach ($users as $user) {
+        // Create team members with realistic roles
+        $jobTitles = [
+            'Senior Full-Stack Developer',
+            'Product Manager',
+            'UX/UI Designer',
+            'DevOps Engineer',
+            'Content Strategist',
+        ];
+
+        foreach ($jobTitles as $index => $jobTitle) {
+            $user = User::factory()->create([
+                'job_title' => $jobTitle,
+            ]);
             $user->update(['current_team_id' => $team->id]);
             $user->teams()->attach($team->id, ['role' => 'member']);
         }
@@ -69,22 +81,48 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // Create blog content
-        $categories = Category::factory(5)->create();
-        $tags = Tag::factory(15)->create();
+        // Create blog content with realistic data
+        $categoryData = [
+            ['name' => 'Technology', 'slug' => 'technology', 'description' => 'Latest trends in software development, AI, and digital innovation'],
+            ['name' => 'Business', 'slug' => 'business', 'description' => 'Entrepreneurship, startup insights, and business strategy'],
+            ['name' => 'Design', 'slug' => 'design', 'description' => 'UI/UX design, creative trends, and visual storytelling'],
+            ['name' => 'Marketing', 'slug' => 'marketing', 'description' => 'Digital marketing strategies, SEO, and content creation'],
+            ['name' => 'Productivity', 'slug' => 'productivity', 'description' => 'Tips and tools to boost your efficiency and workflow'],
+            ['name' => 'Career', 'slug' => 'career', 'description' => 'Professional development and career advancement advice'],
+            ['name' => 'Lifestyle', 'slug' => 'lifestyle', 'description' => 'Work-life balance, wellness, and personal growth'],
+            ['name' => 'Innovation', 'slug' => 'innovation', 'description' => 'Cutting-edge ideas and breakthrough technologies'],
+        ];
+
+        $categories = collect($categoryData)->map(fn($cat) => Category::create($cat));
+
+        $tagNames = [
+            'Laravel', 'PHP', 'Vue.js', 'React', 'TypeScript', 'JavaScript',
+            'AI', 'Machine Learning', 'Web Development', 'Mobile Apps',
+            'Cloud Computing', 'DevOps', 'API', 'Database', 'Security',
+            'Remote Work', 'Startup', 'SaaS', 'Open Source', 'Agile',
+        ];
+
+        $tags = collect($tagNames)->map(fn($name) => Tag::create([
+            'name' => $name,
+            'slug' => Str::slug($name),
+        ]));
 
         $allUsers = User::all();
 
-        foreach (range(1, 30) as $index) {
+        // Create 50 blog posts with realistic distribution
+        foreach (range(1, 50) as $index) {
+            $isPublished = $index <= 40; // 40 published, 10 drafts
+
             $post = Post::factory()->create([
                 'user_id' => $allUsers->random()->id,
                 'category_id' => $categories->random()->id,
-                'is_published' => true,
-                'published_at' => now()->subDays(rand(1, 365)),
+                'is_published' => $isPublished,
+                'published_at' => $isPublished ? now()->subDays(rand(1, 365)) : null,
             ]);
 
+            // Attach 2-4 relevant tags per post
             $post->tags()->attach(
-                $tags->random(rand(2, 5))->pluck('id')->toArray()
+                $tags->random(rand(2, 4))->pluck('id')->toArray()
             );
         }
     }

@@ -46,7 +46,7 @@ A comprehensive Laravel 12 + FilamentPHP v3 + Neuron AI application demonstratin
 *Full-featured blog with categories, tags, and post management*
 
 ### Blog Search
-![Blog Search](docs/blog-search.png)
+![Blog Search](docs/blog-search1.png)
 *Real-time search functionality powered by Laravel Scout*
 
 ## 🚀 Features
