@@ -11,6 +11,7 @@ export default defineConfigWithVueTs(
             'vendor/**',
             'node_modules/**',
             'public/**',
+            'demo/**',
             'bootstrap/ssr/**',
             'bootstrap/cache/**',
             'storage/**',
