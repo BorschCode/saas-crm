@@ -1,30 +1,6 @@
 <template>
     <div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-        <header class="bg-white shadow-sm border-b border-gray-200">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h1 class="text-3xl font-bold text-gray-900">Filament CRM & Blog Platform</h1>
-                        <p class="mt-1 text-gray-600">Comprehensive business management with powerful blogging capabilities</p>
-                    </div>
-                    <div class="flex gap-4">
-                        <a
-                            v-if="canRegister"
-                            href="/register"
-                            class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition"
-                        >
-                            Register
-                        </a>
-                        <a
-                            href="/login"
-                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-                        >
-                            Login
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </header>
+        <WelcomeHeader :can-register="canRegister" />
 
         <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div class="text-center mb-16">
@@ -237,6 +213,8 @@
 </template>
 
 <script setup lang="ts">
+import WelcomeHeader from '@/components/WelcomeHeader.vue';
+
 defineProps({
     canRegister: Boolean,
 });

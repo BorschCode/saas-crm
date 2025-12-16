@@ -1,5 +1,10 @@
 <template>
-    <div class="min-h-screen bg-gray-100 px-4 py-12 sm:px-6 lg:px-8">
+    <Head title="Upload Files - Blog" />
+
+    <div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+        <WelcomeHeader :can-register="true" />
+
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div class="mx-auto max-w-3xl">
             <div class="rounded-lg bg-white p-8 shadow-md">
                 <h1 class="mb-6 text-3xl font-bold text-gray-900">
@@ -112,11 +117,13 @@
                 </div>
             </div>
         </div>
+        </main>
     </div>
 </template>
 
 <script setup lang="ts">
-import { useForm, type InertiaForm } from '@inertiajs/vue3';
+import WelcomeHeader from '@/components/WelcomeHeader.vue';
+import { Head, useForm, type InertiaForm } from '@inertiajs/vue3';
 import { ref, type Ref } from 'vue';
 
 interface UploadForm {
