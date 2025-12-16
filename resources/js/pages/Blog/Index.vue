@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import AppLayout from '@/layouts/AppLayout.vue';
-import { type BreadcrumbItem } from '@/types';
+import WelcomeHeader from '@/components/WelcomeHeader.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 
@@ -75,31 +74,6 @@ const clearSearch = () => {
     router.get('/blog', {}, { preserveState: true, preserveScroll: true });
 };
 
-const breadcrumbs = computed<BreadcrumbItem[]>(() => {
-    const items: BreadcrumbItem[] = [
-        {
-            title: 'Blog',
-            href: '/blog',
-        },
-    ];
-
-    if (props.currentCategory) {
-        items.push({
-            title: props.currentCategory.name,
-            href: `/blog/category/${props.currentCategory.slug}`,
-        });
-    }
-
-    if (props.currentTag) {
-        items.push({
-            title: props.currentTag.name,
-            href: `/blog/tag/${props.currentTag.slug}`,
-        });
-    }
-
-    return items;
-});
-
 const pageTitle = computed(() => {
     if (props.currentCategory) {
         return `${props.currentCategory.name} - Blog`;
@@ -122,9 +96,12 @@ const formatDate = (dateString: string) => {
 <template>
     <Head :title="pageTitle" />
 
-    <AppLayout :breadcrumbs="breadcrumbs">
+    <div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+        <WelcomeHeader :can-register="true" />
+
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div
-            class="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-4 md:p-6"
+            class="flex h-full flex-1 flex-col gap-6"
         >
             <!-- Header -->
             <div class="flex flex-col gap-2">
@@ -399,5 +376,6 @@ const formatDate = (dateString: string) => {
                 </aside>
             </div>
         </div>
-    </AppLayout>
+        </main>
+    </div>
 </template>
