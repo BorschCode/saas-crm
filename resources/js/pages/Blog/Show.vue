@@ -3,6 +3,8 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/vue3';
 import { computed } from 'vue';
+import { Download } from 'lucide-vue-next';
+import { exportPdf } from '@/actions/App/Http/Controllers/PostExportController';
 
 interface Category {
     id: number;
@@ -31,8 +33,8 @@ interface Post {
     content: string;
     featured_image?: string;
     published_at: string;
-    category: Category;
-    user: User;
+    category: Category | null;
+    user: User | null;
     tags: Tag[];
 }
 
@@ -41,20 +43,28 @@ const props = defineProps<{
     relatedPosts: Post[];
 }>();
 
-const breadcrumbs = computed<BreadcrumbItem[]>(() => [
-    {
-        title: 'Blog',
-        href: '/blog',
-    },
-    {
-        title: props.post.category.name,
-        href: `/blog/category/${props.post.category.slug}`,
-    },
-    {
+const breadcrumbs = computed<BreadcrumbItem[]>(() => {
+    const items: BreadcrumbItem[] = [
+        {
+            title: 'Blog',
+            href: '/blog',
+        },
+    ];
+
+    if (props.post.category) {
+        items.push({
+            title: props.post.category.name,
+            href: `/blog/category/${props.post.category.slug}`,
+        });
+    }
+
+    items.push({
         title: props.post.title,
         href: `/blog/${props.post.slug}`,
-    },
-]);
+    });
+
+    return items;
+});
 
 const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -75,20 +85,33 @@ const formatDate = (dateString: string) => {
             <!-- Article Header -->
             <article class="mx-auto w-full max-w-4xl">
                 <div class="mb-6 flex flex-col gap-4">
-                    <div class="flex flex-wrap items-center gap-3 text-sm">
-                        <Link
-                            :href="`/blog/category/${post.category.slug}`"
-                            class="rounded-full bg-sidebar-accent px-4 py-1.5 font-medium text-sidebar-accent-foreground hover:bg-sidebar-accent/80"
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <div class="flex flex-wrap items-center gap-3 text-sm">
+                            <Link
+                                v-if="post.category"
+                                :href="`/blog/category/${post.category.slug}`"
+                                class="rounded-full bg-sidebar-accent px-4 py-1.5 font-medium text-sidebar-accent-foreground hover:bg-sidebar-accent/80"
+                            >
+                                {{ post.category.name }}
+                            </Link>
+                            <span class="text-sidebar-foreground/50">
+                                {{ formatDate(post.published_at) }}
+                            </span>
+                            <template v-if="post.user">
+                                <span class="text-sidebar-foreground/50">•</span>
+                                <span class="text-sidebar-foreground/70">
+                                    By {{ post.user.name }}
+                                </span>
+                            </template>
+                        </div>
+                        <a
+                            :href="exportPdf.url(post.id)"
+                            download
+                            class="inline-flex items-center gap-2 rounded-full bg-sidebar-accent px-4 py-1.5 text-sm font-medium text-sidebar-accent-foreground transition-colors hover:bg-sidebar-accent/80"
                         >
-                            {{ post.category.name }}
-                        </Link>
-                        <span class="text-sidebar-foreground/50">
-                            {{ formatDate(post.published_at) }}
-                        </span>
-                        <span class="text-sidebar-foreground/50">•</span>
-                        <span class="text-sidebar-foreground/70">
-                            By {{ post.user.name }}
-                        </span>
+                            <Download class="h-4 w-4" />
+                            Download PDF
+                        </a>
                     </div>
 
                     <h1
@@ -136,6 +159,7 @@ const formatDate = (dateString: string) => {
 
                 <!-- Author Info -->
                 <div
+                    v-if="post.user"
                     class="mt-12 flex items-center gap-4 rounded-xl border border-sidebar-border/70 bg-sidebar-accent/30 p-6 dark:border-sidebar-border"
                 >
                     <div

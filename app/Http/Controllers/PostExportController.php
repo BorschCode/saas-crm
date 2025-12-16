@@ -4,29 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Services\PdfGenerator;
-use Symfony\Component\HttpFoundation\StreamedResponse;
+use Illuminate\Contracts\Support\Responsable;
 
 class PostExportController extends Controller
 {
-    public function exportPdf(Post $post, PdfGenerator $pdfGenerator): StreamedResponse
+    public function exportPdf(Post $post, PdfGenerator $pdfGenerator): Responsable
     {
-        // Authorization: check if user can view this post
-        if ($post->user_id && auth()->id() !== $post->user_id) {
-            abort(403, 'Unauthorized action');
+        // If post is published, anyone can export it
+        if ($post->is_published) {
+            return $pdfGenerator->downloadFromPost($post);
         }
 
-        if ($post->guest_session_id && session()->getId() !== $post->guest_session_id) {
+        // If post is not published, only the owner can export it
+        $canAccess = ($post->user_id && auth()->id() === $post->user_id) ||
+                     ($post->guest_session_id && session()->getId() === $post->guest_session_id);
+
+        if (! $canAccess) {
             abort(403, 'Unauthorized action');
-        }
-
-        // If post is not published and not owned by current user/session, deny access
-        if (! $post->is_published) {
-            $canAccess = ($post->user_id && auth()->id() === $post->user_id) ||
-                         ($post->guest_session_id && session()->getId() === $post->guest_session_id);
-
-            if (! $canAccess) {
-                abort(404);
-            }
         }
 
         return $pdfGenerator->downloadFromPost($post);
