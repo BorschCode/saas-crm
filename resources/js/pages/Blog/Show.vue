@@ -36,7 +36,7 @@ interface Post {
     tags: Tag[];
 }
 
-const props = defineProps<{
+defineProps<{
     post: Post;
     relatedPosts: Post[];
 }>();
