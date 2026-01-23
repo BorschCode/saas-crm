@@ -2,22 +2,26 @@ FROM php:8.4-fpm
 
 WORKDIR /var/www/html
 
-# System deps
+# --------------------
+# System dependencies
+# --------------------
 RUN apt-get update && apt-get install -y \
     git \
     curl \
     unzip \
+    pkg-config \
     libicu-dev \
     libzip-dev \
     libpng-dev \
-    libonig-dev \
     libjpeg-dev \
     libfreetype6-dev \
+    libonig-dev \
     libexif-dev \
-    pkg-config \
     && rm -rf /var/lib/apt/lists/*
 
+# --------------------
 # PHP core extensions
+# --------------------
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
  && docker-php-ext-install \
     intl \
@@ -29,25 +33,31 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     sockets \
     opcache
 
-# ❗ MongoDB + Redis — ТІЛЬКИ PREBUILT
-RUN apt-get update && apt-get install -y \
-    php-mongodb \
-    php-redis \
-    && rm -rf /var/lib/apt/lists/*
+# --------------------
+# PECL extensions (CRITICAL)
+# --------------------
+RUN pecl install mongodb redis \
+ && docker-php-ext-enable mongodb redis
 
+# --------------------
 # Composer
+# --------------------
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# App
+# --------------------
+# App source
+# --------------------
 COPY . .
 
-# Git safety
+# Git safety (required by Composer)
 RUN git config --global --add safe.directory /var/www/html
 
+# --------------------
 # Laravel optimize
+# --------------------
 RUN composer install --no-dev --optimize-autoloader \
-    && php artisan key:generate --force \
-    && php artisan optimize
+ && php artisan key:generate --force \
+ && php artisan optimize
 
 EXPOSE 10000
 
