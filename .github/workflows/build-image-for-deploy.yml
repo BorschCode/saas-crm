@@ -27,9 +27,13 @@ jobs:
           context: .
           file: Dockerfile
           platforms: linux/amd64
+          pull: true
           push: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/saas-crm:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/saas-crm:${{ github.sha }}
+          labels: |
+            org.opencontainers.image.source=${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
           cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/saas-crm:buildcache
           cache-to: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/saas-crm:buildcache,mode=max
