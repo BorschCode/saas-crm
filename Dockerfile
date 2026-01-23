@@ -9,6 +9,7 @@ RUN apk add --no-cache \
     git \
     icu-dev \
     libzip-dev \
+    libpng-dev \
     oniguruma-dev \
     linux-headers \
     $PHPIZE_DEPS
@@ -18,6 +19,7 @@ RUN docker-php-ext-install \
     intl \
     mbstring \
     zip \
+    gd \
     pcntl \
     sockets
 
@@ -28,17 +30,12 @@ RUN pecl install mongodb redis \
 # Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Copy app
 COPY . .
 
-# Install deps
-RUN composer install --no-dev --optimize-autoloader
-
-# Laravel optimizations
-RUN php artisan key:generate --force \
+RUN composer install --no-dev --optimize-autoloader \
+    && php artisan key:generate --force \
     && php artisan optimize
 
-# Render uses $PORT
 EXPOSE 10000
 
 CMD ["php", "-S", "0.0.0.0:${PORT}", "-t", "public"]
