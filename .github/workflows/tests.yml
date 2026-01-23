@@ -32,7 +32,8 @@ jobs:
           --health-retries=5
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -40,7 +41,7 @@ jobs:
           php-version: 8.4
           extensions: mongodb, redis
           tools: composer:v2
-          coverage: xdebug
+          coverage: none
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -48,30 +49,43 @@ jobs:
           node-version: '22'
           cache: 'npm'
 
-      - name: Install Node Dependencies
+      - name: Install Node dependencies
         run: npm ci
 
-      - name: Install PHP Dependencies
+      - name: Install PHP dependencies
         run: composer install --no-interaction --prefer-dist
 
       - name: Prepare environment
         run: |
           cp .env.example .env
-          echo "APP_ENV=testing" >> .env
-          echo "DB_CONNECTION=mongodb" >> .env
-          echo "MONGODB_URI=mongodb://127.0.0.1:27017/testing" >> .env
-          echo "MONGODB_DATABASE=testing" >> .env
 
+          echo "APP_ENV=testing" >> .env
+          echo "APP_DEBUG=true" >> .env
+
+          # Mongo — БЕЗ AUTH
+          echo "DB_CONNECTION=mongodb" >> .env
+          echo "DB_HOST=127.0.0.1" >> .env
+          echo "DB_PORT=27017" >> .env
+          echo "DB_DATABASE=testing" >> .env
+          echo "DB_USERNAME=" >> .env
+          echo "DB_PASSWORD=" >> .env
+          echo "MONGODB_URI=mongodb://127.0.0.1:27017/testing" >> .env
+
+          # Redis (можна залишити, але НЕ як cache/session)
           echo "REDIS_CLIENT=phpredis" >> .env
-          echo "REDIS_URL=redis://127.0.0.1:6379" >> .env
           echo "REDIS_HOST=127.0.0.1" >> .env
           echo "REDIS_PORT=6379" >> .env
+          echo "REDIS_URL=redis://127.0.0.1:6379" >> .env
 
-          echo "CACHE_DRIVER=redis" >> .env
-          echo "SESSION_DRIVER=redis" >> .env
+          # ТЕСТОВІ драйвери
+          echo "CACHE_DRIVER=array" >> .env
+          echo "SESSION_DRIVER=array" >> .env
           echo "QUEUE_CONNECTION=sync" >> .env
 
-      - name: Generate key
+          # Mail
+          echo "MAIL_MAILER=array" >> .env
+
+      - name: Generate app key
         run: php artisan key:generate
 
       - name: Build assets
