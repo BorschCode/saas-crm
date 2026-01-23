@@ -26,10 +26,12 @@ RUN install-php-extensions \
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # App
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-cache
-
 COPY . .
+
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-cache \
+ && php artisan key:generate --force \
+ && php artisan optimize
+
 
 RUN php artisan package:discover --ansi \
  && php artisan config:cache \
