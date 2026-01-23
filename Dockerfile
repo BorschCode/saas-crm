@@ -1,26 +1,38 @@
-# Stage 1: Build extensions
-FROM php:8.4-cli-alpine AS extensions
-
-RUN apk add --no-cache autoconf g++ make linux-headers openssl-dev \
-    && pecl install mongodb-1.20.1 redis-6.1.0 \
-    && docker-php-ext-enable mongodb redis
-
-# Stage 2: Runtime
-FROM php:8.4-cli-alpine
+FROM php:8.4-cli-bookworm
 
 WORKDIR /var/www/html
 
-RUN apk add --no-cache \
-    git curl \
-    icu libzip libpng libjpeg-turbo freetype oniguruma \
-    icu-dev libzip-dev libpng-dev libjpeg-turbo-dev freetype-dev oniguruma-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install intl mbstring zip gd exif pcntl sockets opcache \
-    && apk del icu-dev libzip-dev libpng-dev libjpeg-turbo-dev freetype-dev oniguruma-dev
+# Встановлюємо лише системні залежності
+RUN apt-get update && apt-get install -y \
+    git curl unzip \
+    libicu-dev libzip-dev libpng-dev libjpeg-dev \
+    libfreetype6-dev libonig-dev libssl-dev \
+    pkg-config \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Копіюємо pre-compiled extensions зі stage 1
-COPY --from=extensions /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
-COPY --from=extensions /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
+# PHP core extensions (без pcntl/sockets якщо не потрібні)
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) \
+    intl \
+    mbstring \
+    zip \
+    gd \
+    exif \
+    opcache
+
+# MongoDB і Redis БЕЗ компіляції — використаємо готові .so файли
+RUN mkdir -p /tmp/extensions && cd /tmp/extensions \
+    && curl -L https://github.com/mongodb/mongo-php-driver/releases/download/1.20.1/mongodb-1.20.1.tgz -o mongodb.tgz \
+    && tar -xzf mongodb.tgz \
+    && cd mongodb-1.20.1 \
+    && phpize && ./configure && make -j$(nproc) && make install \
+    && docker-php-ext-enable mongodb \
+    && cd /tmp && rm -rf /tmp/extensions
+
+# Redis (швидко компілюється)
+RUN pecl install redis-6.1.0 \
+    && docker-php-ext-enable redis \
+    && rm -rf /tmp/pear
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
