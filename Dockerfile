@@ -2,7 +2,7 @@ FROM php:8.4-fpm
 
 WORKDIR /var/www/html
 
-# System dependencies
+# System deps
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -34,7 +34,7 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 # App source
 COPY . .
 
-# Git safety (REQUIRED)
+# Git safety
 RUN git config --global --add safe.directory /var/www/html
 
 # Install deps & optimize
@@ -42,6 +42,8 @@ RUN composer install --no-dev --optimize-autoloader \
     && php artisan key:generate --force \
     && php artisan optimize
 
+# Default port (CRITICAL)
+ENV PORT=10000
 EXPOSE 10000
 
-CMD ["php", "-S", "0.0.0.0:${PORT}", "-t", "public"]
+CMD php -S 0.0.0.0:${PORT} -t public
