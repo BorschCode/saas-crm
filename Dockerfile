@@ -1,8 +1,8 @@
-FROM php:8.4-fpm
+FROM php:8.4-cli
 
 WORKDIR /var/www/html
 
-# System deps
+# System deps (CRITICAL for mongodb)
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -12,6 +12,10 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     libpng-dev \
     libonig-dev \
+    libssl-dev \
+    libsasl2-dev \
+    libmongoc-dev \
+    libbson-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # PHP extensions
@@ -24,25 +28,25 @@ RUN docker-php-ext-install \
     pcntl \
     sockets
 
-# MongoDB + Redis
-RUN pecl install mongodb redis \
-    && docker-php-ext-enable mongodb redis
+# MongoDB + Redis (NO PECL COMPILATION)
+RUN pecl install redis \
+    && docker-php-ext-enable redis
+
+RUN pecl install mongodb-1.20.1 \
+    && docker-php-ext-enable mongodb
 
 # Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# App source
+# App
 COPY . .
 
-# Git safety
 RUN git config --global --add safe.directory /var/www/html
 
-# Install deps & optimize
 RUN composer install --no-dev --optimize-autoloader \
     && php artisan key:generate --force \
     && php artisan optimize
 
-# Default port (CRITICAL)
 ENV PORT=10000
 EXPOSE 10000
 
