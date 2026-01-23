@@ -12,22 +12,41 @@
             <directory>tests/Feature</directory>
         </testsuite>
     </testsuites>
+
     <source>
         <include>
             <directory>app</directory>
         </include>
     </source>
+
     <php>
+        <!-- App -->
         <env name="APP_ENV" value="testing"/>
+        <env name="APP_DEBUG" value="true"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>
-        <env name="BCRYPT_ROUNDS" value="4"/>
-        <env name="BROADCAST_CONNECTION" value="null"/>
-        <env name="CACHE_STORE" value="array"/>
+
+        <!-- MongoDB (DSN-based, REQUIRED) -->
         <env name="DB_CONNECTION" value="mongodb"/>
-        <env name="DB_DATABASE" value="testing"/>
-        <env name="MAIL_MAILER" value="array"/>
-        <env name="QUEUE_CONNECTION" value="sync"/>
+        <env name="MONGODB_URI" value="mongodb://127.0.0.1:27017/testing"/>
+        <env name="MONGODB_DATABASE" value="testing"/>
+
+        <!-- Redis (URL-based, REQUIRED) -->
+        <env name="REDIS_CLIENT" value="phpredis"/>
+        <env name="REDIS_URL" value="redis://127.0.0.1:6379"/>
+        <env name="REDIS_HOST" value="127.0.0.1"/>
+        <env name="REDIS_PORT" value="6379"/>
+
+        <!-- Runtime behavior -->
+        <env name="CACHE_DRIVER" value="redis"/>
+        <env name="CACHE_STORE" value="redis"/>
         <env name="SESSION_DRIVER" value="array"/>
+        <env name="QUEUE_CONNECTION" value="sync"/>
+
+        <!-- Mail / misc -->
+        <env name="MAIL_MAILER" value="array"/>
+        <env name="BCRYPT_ROUNDS" value="4"/>
+
+        <!-- Disable observability in tests -->
         <env name="PULSE_ENABLED" value="false"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
         <env name="NIGHTWATCH_ENABLED" value="false"/>
