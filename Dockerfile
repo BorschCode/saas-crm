@@ -1,38 +1,53 @@
+# Stage 1: Build MongoDB extension (кешується окремо)
+FROM php:8.4-cli-bookworm AS mongodb-builder
+
+RUN apt-get update && apt-get install -y \
+    libssl-dev pkg-config autoconf g++ make \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pecl install mongodb-1.20.1 \
+    && docker-php-ext-enable mongodb
+
+# Stage 2: Build Redis extension (швидко)
+FROM php:8.4-cli-bookworm AS redis-builder
+
+RUN pecl install redis-6.1.0 \
+    && docker-php-ext-enable redis
+
+# Stage 3: Runtime application
 FROM php:8.4-cli-bookworm
 
 WORKDIR /var/www/html
 
-# Встановлюємо лише системні залежності
+# System dependencies (без build tools)
 RUN apt-get update && apt-get install -y \
     git curl unzip \
-    libicu-dev libzip-dev libpng-dev libjpeg-dev \
-    libfreetype6-dev libonig-dev libssl-dev \
-    pkg-config \
+    libicu72 libzip4 libpng16-16 libjpeg62-turbo \
+    libfreetype6 libonig5 libssl3 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# PHP core extensions (без pcntl/sockets якщо не потрібні)
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+# Build dependencies для PHP extensions
+RUN apt-get update && apt-get install -y \
+    libicu-dev libzip-dev libpng-dev libjpeg-dev \
+    libfreetype6-dev libonig-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) \
-    intl \
-    mbstring \
-    zip \
-    gd \
-    exif \
-    opcache
+        intl mbstring zip gd exif opcache \
+    && apt-get purge -y --auto-remove \
+        libicu-dev libzip-dev libpng-dev libjpeg-dev \
+        libfreetype6-dev libonig-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# MongoDB і Redis БЕЗ компіляції — використаємо готові .so файли
-RUN mkdir -p /tmp/extensions && cd /tmp/extensions \
-    && curl -L https://github.com/mongodb/mongo-php-driver/releases/download/1.20.1/mongodb-1.20.1.tgz -o mongodb.tgz \
-    && tar -xzf mongodb.tgz \
-    && cd mongodb-1.20.1 \
-    && phpize && ./configure && make -j$(nproc) && make install \
-    && docker-php-ext-enable mongodb \
-    && cd /tmp && rm -rf /tmp/extensions
+# Copy pre-built extensions
+COPY --from=mongodb-builder /usr/local/lib/php/extensions/no-debug-non-zts-20230831/mongodb.so \
+     /usr/local/lib/php/extensions/no-debug-non-zts-20230831/
+COPY --from=mongodb-builder /usr/local/etc/php/conf.d/docker-php-ext-mongodb.ini \
+     /usr/local/etc/php/conf.d/
 
-# Redis (швидко компілюється)
-RUN pecl install redis-6.1.0 \
-    && docker-php-ext-enable redis \
-    && rm -rf /tmp/pear
+COPY --from=redis-builder /usr/local/lib/php/extensions/no-debug-non-zts-20230831/redis.so \
+     /usr/local/lib/php/extensions/no-debug-non-zts-20230831/
+COPY --from=redis-builder /usr/local/etc/php/conf.d/docker-php-ext-redis.ini \
+     /usr/local/etc/php/conf.d/
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 

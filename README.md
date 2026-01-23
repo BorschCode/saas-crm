@@ -2,6 +2,11 @@
 
 Comprehensive **CRM, project management, and blogging SaaS platform** built with **Laravel 12** and **Filament**, featuring AI-powered content workflows and modern frontend architecture.
 
+## 🌐 Live Demo
+
+- **Landing Page**: [https://borschcode.github.io/](https://borschcode.github.io/)
+- **Admin Dashboard**: [https://saas-crm-upo6.onrender.com/](https://saas-crm-upo6.onrender.com/)
+
 ---
 
 ## 🧩 Tech Stack & Badges
