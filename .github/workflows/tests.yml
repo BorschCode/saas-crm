@@ -62,16 +62,22 @@ jobs:
           echo "APP_ENV=testing" >> .env
           echo "APP_DEBUG=true" >> .env
 
-          # MongoDB (ВАЖЛИВО: тільки 127.0.0.1 у CI)
+          # Mongo — БЕЗ AUTH
           echo "DB_CONNECTION=mongodb" >> .env
+          echo "DB_HOST=127.0.0.1" >> .env
+          echo "DB_PORT=27017" >> .env
+          echo "DB_DATABASE=testing" >> .env
+          echo "DB_USERNAME=" >> .env
+          echo "DB_PASSWORD=" >> .env
           echo "MONGODB_URI=mongodb://127.0.0.1:27017/testing" >> .env
-          echo "MONGODB_DATABASE=testing" >> .env
 
-          # Redis
+          # Redis (можна залишити, але НЕ як cache/session)
           echo "REDIS_CLIENT=phpredis" >> .env
+          echo "REDIS_HOST=127.0.0.1" >> .env
+          echo "REDIS_PORT=6379" >> .env
           echo "REDIS_URL=redis://127.0.0.1:6379" >> .env
 
-          # ТЕСТОВІ драйвери (НЕ redis!)
+          # ТЕСТОВІ драйвери
           echo "CACHE_DRIVER=array" >> .env
           echo "SESSION_DRIVER=array" >> .env
           echo "QUEUE_CONNECTION=sync" >> .env
