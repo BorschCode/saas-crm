@@ -1,18 +1,17 @@
-FROM php:8.3-fpm-alpine
+FROM php:8.3-fpm
 
 WORKDIR /var/www/html
 
 # System deps
-RUN apk add --no-cache \
-    bash \
-    curl \
+RUN apt-get update && apt-get install -y \
     git \
-    icu-dev \
+    curl \
+    unzip \
+    libicu-dev \
     libzip-dev \
     libpng-dev \
-    oniguruma-dev \
-    linux-headers \
-    $PHPIZE_DEPS
+    pkg-config \
+    && rm -rf /var/lib/apt/lists/*
 
 # PHP extensions
 RUN docker-php-ext-install \
@@ -23,7 +22,7 @@ RUN docker-php-ext-install \
     pcntl \
     sockets
 
-# MongoDB + Redis
+# MongoDB + Redis (stable on Debian)
 RUN pecl install mongodb redis \
     && docker-php-ext-enable mongodb redis
 
@@ -32,6 +31,7 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 COPY . .
 
+# Install deps & optimize
 RUN composer install --no-dev --optimize-autoloader \
     && php artisan key:generate --force \
     && php artisan optimize
