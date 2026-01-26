@@ -7,15 +7,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use MongoDB\Laravel\Eloquent\Model;
 
 /**
- * @property mixed $id 15 occurrences
- * @property \Illuminate\Support\Carbon|null $created_at 15 occurrences
- * @property string|null $name 15 occurrences
- * @property string|null $post_ids 15 occurrences
- * @property string|null $slug 15 occurrences
- * @property \Illuminate\Support\Carbon|null $updated_at 15 occurrences
+ * @property mixed $id 20 occurrences
+ * @property \Illuminate\Support\Carbon|null $created_at 20 occurrences
+ * @property string|null $name 20 occurrences
+ * @property string|null $post_ids 20 occurrences
+ * @property string|null $slug 20 occurrences
+ * @property \Illuminate\Support\Carbon|null $updated_at 20 occurrences
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Post> $posts
  * @property-read int|null $posts_count
- *
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Tag addHybridHas(\Illuminate\Database\Eloquent\Relations\Relation $relation, string $operator = '>=', string $count = 1, string $boolean = 'and', ?\Closure $callback = null)
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Tag aggregate($function = null, $columns = [])
  * @method static \Database\Factories\TagFactory factory($count = null, $state = [])
@@ -34,7 +33,6 @@ use MongoDB\Laravel\Eloquent\Model;
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Tag wherePostIds($value)
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Tag whereSlug($value)
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Tag whereUpdatedAt($value)
- *
  * @mixin \Eloquent
  */
 class Tag extends Model

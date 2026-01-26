@@ -9,26 +9,25 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use MongoDB\Laravel\Eloquent\Model;
 
 /**
- * @property mixed $id 9 occurrences
- * @property string|null $client_id 9 occurrences
- * @property \Illuminate\Support\Carbon|null $created_at 9 occurrences
- * @property string|null $currency 9 occurrences
- * @property string|null $description 9 occurrences
- * @property \Illuminate\Support\Carbon|null $expected_close_date 9 occurrences
- * @property string|null $notes 9 occurrences
- * @property int|null $probability 9 occurrences
- * @property string|null $stage 9 occurrences
- * @property string|null $team_id 9 occurrences
- * @property string|null $title 9 occurrences
- * @property \Illuminate\Support\Carbon|null $updated_at 9 occurrences
- * @property numeric|null $value 9 occurrences
+ * @property mixed $id 14 occurrences
+ * @property string|null $client_id 14 occurrences
+ * @property \Illuminate\Support\Carbon|null $created_at 14 occurrences
+ * @property string|null $currency 14 occurrences
+ * @property string|null $description 14 occurrences
+ * @property \Illuminate\Support\Carbon|null $expected_close_date 14 occurrences
+ * @property string|null $notes 14 occurrences
+ * @property int|null $probability 14 occurrences
+ * @property string|null $stage 14 occurrences
+ * @property string|null $team_id 14 occurrences
+ * @property string|null $title 14 occurrences
+ * @property \Illuminate\Support\Carbon|null $updated_at 14 occurrences
+ * @property numeric|null $value 14 occurrences
  * @property-read \App\Models\Client|null $client
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Comment> $comments
  * @property-read int|null $comments_count
  * @property-read \App\Models\Contact|null $contact
  * @property-read \App\Models\User|null $owner
  * @property-read \App\Models\Team|null $team
- *
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Deal addHybridHas(\Illuminate\Database\Eloquent\Relations\Relation $relation, string $operator = '>=', string $count = 1, string $boolean = 'and', ?\Closure $callback = null)
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Deal aggregate($function = null, $columns = [])
  * @method static \Database\Factories\DealFactory factory($count = null, $state = [])
@@ -57,7 +56,6 @@ use MongoDB\Laravel\Eloquent\Model;
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Deal whereValue($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal withTrashed(bool $withTrashed = true)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal withoutTrashed()
- *
  * @mixin \Eloquent
  */
 class Deal extends Model

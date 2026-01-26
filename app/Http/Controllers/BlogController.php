@@ -10,6 +10,7 @@ use Inertia\Response;
 
 class BlogController extends Controller
 {
+    public const int DEFAULT_PER_PAGE = 12;
     public function index(): Response
     {
         $searchQuery = request('search');
@@ -23,7 +24,7 @@ class BlogController extends Controller
                     ->whereNotNull('published_at')
                     ->where('published_at', '<=', now())
                 )
-                ->paginate(12);
+                ->paginate(self::DEFAULT_PER_PAGE);
         } else {
             // Normal query when no search
             $posts = Post::query()
@@ -32,7 +33,7 @@ class BlogController extends Controller
                 ->whereNotNull('published_at')
                 ->where('published_at', '<=', now())
                 ->latest('published_at')
-                ->paginate(12);
+                ->paginate(self::DEFAULT_PER_PAGE);
         }
 
         $categories = Category::all()->map(function ($category) {
@@ -92,7 +93,7 @@ class BlogController extends Controller
             ->whereNotNull('published_at')
             ->where('published_at', '<=', now())
             ->latest('published_at')
-            ->paginate(12);
+            ->paginate(self::DEFAULT_PER_PAGE);
 
         $categories = Category::all()->map(function ($category) {
             $category->posts_count = Post::where('category_id', $category->id)->count();
@@ -129,7 +130,7 @@ class BlogController extends Controller
             ->filter(fn ($post) => $post->tags->contains('id', $tag->id));
 
         // Manual pagination
-        $perPage = 12;
+        $perPage = self::DEFAULT_PER_PAGE;
         $currentPage = request()->get('page', 1);
         $posts = new \Illuminate\Pagination\LengthAwarePaginator(
             $allPosts->forPage($currentPage, $perPage)->values(),

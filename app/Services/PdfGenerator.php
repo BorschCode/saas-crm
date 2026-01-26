@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Post;
+use Illuminate\Contracts\Support\Responsable;
 use Spatie\LaravelPdf\Facades\Pdf;
 
 class PdfGenerator
@@ -22,7 +23,7 @@ class PdfGenerator
         return $pdf->base64();
     }
 
-    public function downloadFromPost(Post $post): \Illuminate\Contracts\Support\Responsable
+    public function downloadFromPost(Post $post): Responsable
     {
         return Pdf::view('pdf.post-export', [
             'post' => $post,

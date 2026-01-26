@@ -37,7 +37,6 @@ use MongoDB\Laravel\Eloquent\Model;
  * @property-read int|null $time_entries_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
  * @property-read int|null $users_count
- *
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Team addHybridHas(\Illuminate\Database\Eloquent\Relations\Relation $relation, string $operator = '>=', string $count = 1, string $boolean = 'and', ?\Closure $callback = null)
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Team aggregate($function = null, $columns = [])
  * @method static \Database\Factories\TeamFactory factory($count = null, $state = [])
@@ -62,7 +61,6 @@ use MongoDB\Laravel\Eloquent\Model;
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Team whereUserIds($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Team withTrashed(bool $withTrashed = true)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Team withoutTrashed()
- *
  * @mixin \Eloquent
  */
 class Team extends Model
