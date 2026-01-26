@@ -65,7 +65,7 @@ const handleSearch = () => {
     router.get(
         '/blog',
         { search: search.value || undefined },
-        { preserveState: true, preserveScroll: true }
+        { preserveState: true, preserveScroll: true },
     );
 };
 
@@ -96,59 +96,38 @@ const formatDate = (dateString: string) => {
 <template>
     <Head :title="pageTitle" />
 
-    <div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div
+        class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50"
+    >
         <WelcomeHeader :can-register="true" />
 
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div
-            class="flex h-full flex-1 flex-col gap-6"
-        >
-            <!-- Header -->
-            <div class="flex flex-col gap-2">
-                <h1
-                    class="text-3xl font-bold tracking-tight text-sidebar-foreground"
-                >
-                    {{ pageTitle }}
-                </h1>
-                <p
-                    v-if="currentCategory?.description"
-                    class="text-sidebar-foreground/70"
-                >
-                    {{ currentCategory.description }}
-                </p>
-            </div>
+        <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+            <div class="flex flex-col gap-8">
+                <!-- Header -->
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900">
+                        {{ pageTitle }}
+                    </h1>
+                    <p
+                        v-if="currentCategory?.description"
+                        class="mt-1 text-gray-600"
+                    >
+                        {{ currentCategory.description }}
+                    </p>
+                </div>
 
-            <!-- Search Bar -->
-            <div class="relative">
-                <form @submit.prevent="handleSearch" class="relative">
-                    <input
-                        v-model="search"
-                        type="text"
-                        placeholder="Search posts..."
-                        class="w-full rounded-xl border border-sidebar-border/70 bg-background px-4 py-3 pl-11 pr-11 text-sidebar-foreground placeholder:text-sidebar-foreground/50 focus:border-sidebar-accent-foreground focus:outline-none focus:ring-2 focus:ring-sidebar-accent-foreground/20 dark:border-sidebar-border"
-                        @input="handleSearch"
-                    />
-                    <svg
-                        class="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-sidebar-foreground/50"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                <!-- Search -->
+                <div>
+                    <form @submit.prevent="handleSearch" class="relative">
+                        <input
+                            v-model="search"
+                            type="text"
+                            placeholder="Search posts…"
+                            class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 pr-11 pl-11 text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
+                            @input="handleSearch"
                         />
-                    </svg>
-                    <button
-                        v-if="search"
-                        type="button"
-                        @click="clearSearch"
-                        class="absolute right-4 top-1/2 -translate-y-1/2 text-sidebar-foreground/50 hover:text-sidebar-foreground"
-                    >
                         <svg
-                            class="h-5 w-5"
+                            class="absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-gray-400"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -157,225 +136,172 @@ const formatDate = (dateString: string) => {
                                 stroke-linecap="round"
                                 stroke-linejoin="round"
                                 stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                             />
                         </svg>
-                    </button>
-                </form>
-                <p
-                    v-if="searchQuery"
-                    class="mt-2 text-sm text-sidebar-foreground/70"
-                >
-                    Showing results for "{{ searchQuery }}"
-                </p>
-            </div>
-
-            <div class="grid gap-6 lg:grid-cols-12">
-                <!-- Main Content -->
-                <div class="lg:col-span-8">
-                    <!-- Posts Grid -->
-                    <div
-                        v-if="posts.data.length > 0"
-                        class="grid gap-6 md:grid-cols-2"
-                    >
-                        <article
-                            v-for="post in posts.data"
-                            :key="post.id"
-                            class="group flex flex-col overflow-hidden rounded-xl border border-sidebar-border/70 bg-background transition-all hover:shadow-lg dark:border-sidebar-border"
+                        <button
+                            v-if="search"
+                            type="button"
+                            @click="clearSearch"
+                            class="absolute top-1/2 right-4 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                         >
-                            <Link
-                                :href="`/blog/${post.slug}`"
-                                class="relative aspect-video overflow-hidden bg-sidebar-accent"
+                            ✕
+                        </button>
+                    </form>
+                </div>
+
+                <div class="grid gap-8 lg:grid-cols-12">
+                    <!-- POSTS -->
+                    <div class="lg:col-span-8">
+                        <div
+                            v-if="posts.data.length"
+                            class="grid gap-6 md:grid-cols-2"
+                        >
+                            <article
+                                v-for="post in posts.data"
+                                :key="post.id"
+                                class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition hover:shadow-md"
                             >
-                                <img
-                                    v-if="post.featured_image"
-                                    :src="post.featured_image"
-                                    :alt="post.title"
-                                    class="h-full w-full object-cover transition-transform group-hover:scale-105"
-                                />
-                                <div
-                                    v-else
-                                    class="flex h-full w-full items-center justify-center bg-gradient-to-br from-sidebar-accent to-sidebar-accent-foreground/10"
-                                >
-                                    <span
-                                        class="text-4xl font-bold text-sidebar-accent-foreground/20"
-                                    >
-                                        {{ post.title.charAt(0) }}
-                                    </span>
-                                </div>
-                            </Link>
-
-                            <div class="flex flex-1 flex-col gap-3 p-5">
-                                <div class="flex items-center gap-2 text-sm">
-                                    <Link
-                                        :href="`/blog/category/${post.category.slug}`"
-                                        class="rounded-full bg-sidebar-accent px-3 py-1 font-medium text-sidebar-accent-foreground hover:bg-sidebar-accent/80"
-                                    >
-                                        {{ post.category.name }}
-                                    </Link>
-                                    <span
-                                        class="text-sidebar-foreground/50"
-                                    >
-                                        {{ formatDate(post.published_at) }}
-                                    </span>
-                                </div>
-
                                 <Link
                                     :href="`/blog/${post.slug}`"
-                                    class="group/title"
+                                    class="block aspect-video bg-gray-100"
                                 >
-                                    <h2
-                                        class="text-xl font-bold text-sidebar-foreground group-hover/title:text-sidebar-accent-foreground"
-                                    >
-                                        {{ post.title }}
-                                    </h2>
+                                    <img
+                                        v-if="post.featured_image"
+                                        :src="post.featured_image"
+                                        :alt="post.title"
+                                        class="h-full w-full object-cover"
+                                    />
                                 </Link>
 
-                                <p
-                                    v-if="post.excerpt"
-                                    class="line-clamp-3 flex-1 text-sidebar-foreground/70"
-                                >
-                                    {{ post.excerpt }}
-                                </p>
-
-                                <div
-                                    class="flex items-center justify-between pt-2"
-                                >
-                                    <div class="flex items-center gap-2">
-                                        <div
-                                            class="flex h-8 w-8 items-center justify-center rounded-full bg-sidebar-accent text-sm font-medium text-sidebar-accent-foreground"
+                                <div class="flex flex-col gap-3 p-5">
+                                    <div
+                                        class="flex items-center gap-2 text-sm"
+                                    >
+                                        <Link
+                                            :href="`/blog/category/${post.category.slug}`"
+                                            class="rounded-full bg-blue-100 px-3 py-1 font-medium text-blue-700"
                                         >
-                                            {{ post.user.name.charAt(0) }}
-                                        </div>
-                                        <span
-                                            class="text-sm text-sidebar-foreground/70"
-                                        >
-                                            {{ post.user.name }}
+                                            {{ post.category.name }}
+                                        </Link>
+                                        <span class="text-gray-500">
+                                            {{ formatDate(post.published_at) }}
                                         </span>
                                     </div>
 
-                                    <Link
-                                        :href="`/blog/${post.slug}`"
-                                        class="text-sm font-medium text-sidebar-accent-foreground hover:underline"
+                                    <h2
+                                        class="text-xl font-semibold text-gray-900"
                                     >
-                                        Read more →
+                                        {{ post.title }}
+                                    </h2>
+
+                                    <p
+                                        v-if="post.excerpt"
+                                        class="line-clamp-3 text-gray-600"
+                                    >
+                                        {{ post.excerpt }}
+                                    </p>
+
+                                    <div
+                                        class="flex items-center justify-between pt-2"
+                                    >
+                                        <span class="text-sm text-gray-500">
+                                            {{ post.user.name }}
+                                        </span>
+                                        <Link
+                                            :href="`/blog/${post.slug}`"
+                                            class="text-sm font-medium text-blue-600 hover:underline"
+                                        >
+                                            Read →
+                                        </Link>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+
+                        <!-- Pagination -->
+                        <div
+                            v-if="posts.last_page > 1"
+                            class="mt-10 flex flex-wrap justify-center gap-2"
+                        >
+                            <button
+                                v-for="(link, i) in posts.links"
+                                :key="i"
+                                :disabled="!link.url"
+                                @click="
+                                    link.url &&
+                                    router.get(
+                                        link.url,
+                                        {},
+                                        {
+                                            preserveState: true,
+                                            preserveScroll: true,
+                                        },
+                                    )
+                                "
+                                v-html="link.label"
+                                class="min-w-[42px] rounded-lg border px-4 py-2 text-sm font-medium transition disabled:opacity-50"
+                                :class="
+                                    link.active
+                                        ? 'border-gray-300 bg-white text-gray-900 shadow'
+                                        : 'border-gray-200 bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                "
+                            />
+                        </div>
+                    </div>
+
+                    <!-- SIDEBAR -->
+                    <aside class="lg:col-span-4">
+                        <div class="sticky top-6 flex flex-col gap-6">
+                            <!-- Categories -->
+                            <div
+                                class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm"
+                            >
+                                <h3
+                                    class="mb-4 text-lg font-semibold text-gray-900"
+                                >
+                                    Categories
+                                </h3>
+                                <div class="flex flex-col gap-2">
+                                    <Link
+                                        v-for="c in categories"
+                                        :key="c.id"
+                                        :href="`/blog/category/${c.slug}`"
+                                        class="flex justify-between rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                    >
+                                        <span>{{ c.name }}</span>
+                                        <span class="text-gray-400">{{
+                                            c.posts_count
+                                        }}</span>
                                     </Link>
                                 </div>
                             </div>
-                        </article>
-                    </div>
 
-                    <!-- Empty State -->
-                    <div
-                        v-else
-                        class="flex flex-col items-center justify-center rounded-xl border border-sidebar-border/70 bg-background p-12 text-center dark:border-sidebar-border"
-                    >
-                        <h3
-                            class="mb-2 text-lg font-semibold text-sidebar-foreground"
-                        >
-                            No posts found
-                        </h3>
-                        <p class="text-sidebar-foreground/70">
-                            Check back later for new content!
-                        </p>
-                    </div>
-
-                    <!-- Pagination -->
-                    <div
-                        v-if="posts.last_page > 1"
-                        class="mt-6 flex justify-center gap-2"
-                    >
-                        <template
-                            v-for="(link, index) in posts.links"
-                            :key="index"
-                        >
-                            <a
-                                v-if="link.url"
-                                :href="link.url"
-                                class="rounded-lg border border-sidebar-border/70 px-4 py-2 text-sm font-medium transition-colors hover:bg-sidebar-accent dark:border-sidebar-border"
-                                :class="{
-                                    'bg-sidebar-accent text-sidebar-accent-foreground':
-                                        link.active,
-                                    'text-sidebar-foreground': !link.active,
-                                }"
-                                v-html="link.label"
-                            />
-                            <span
-                                v-else
-                                class="rounded-lg border border-sidebar-border/70 px-4 py-2 text-sm font-medium text-sidebar-foreground/50 dark:border-sidebar-border"
-                                v-html="link.label"
-                            />
-                        </template>
-                    </div>
-                </div>
-
-                <!-- Sidebar -->
-                <aside class="lg:col-span-4">
-                    <div class="sticky top-6 flex flex-col gap-6">
-                        <!-- Categories -->
-                        <div
-                            class="rounded-xl border border-sidebar-border/70 bg-background p-5 dark:border-sidebar-border"
-                        >
-                            <h3
-                                class="mb-4 text-lg font-semibold text-sidebar-foreground"
+                            <!-- Tags -->
+                            <div
+                                v-if="popularTags.length"
+                                class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm"
                             >
-                                Categories
-                            </h3>
-                            <div class="flex flex-col gap-2">
-                                <Link
-                                    v-for="category in categories"
-                                    :key="category.id"
-                                    :href="`/blog/category/${category.slug}`"
-                                    class="flex items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors hover:bg-sidebar-accent"
-                                    :class="{
-                                        'bg-sidebar-accent font-medium text-sidebar-accent-foreground':
-                                            currentCategory?.id === category.id,
-                                        'text-sidebar-foreground':
-                                            currentCategory?.id !== category.id,
-                                    }"
+                                <h3
+                                    class="mb-4 text-lg font-semibold text-gray-900"
                                 >
-                                    <span>{{ category.name }}</span>
-                                    <span
-                                        v-if="category.posts_count"
-                                        class="text-xs text-sidebar-foreground/50"
+                                    Popular Tags
+                                </h3>
+                                <div class="flex flex-wrap gap-2">
+                                    <Link
+                                        v-for="t in popularTags"
+                                        :key="t.id"
+                                        :href="`/blog/tag/${t.slug}`"
+                                        class="rounded-full border border-gray-200 px-3 py-1 text-sm text-gray-700 hover:bg-gray-100"
                                     >
-                                        {{ category.posts_count }}
-                                    </span>
-                                </Link>
+                                        {{ t.name }}
+                                    </Link>
+                                </div>
                             </div>
                         </div>
-
-                        <!-- Popular Tags -->
-                        <div
-                            v-if="popularTags.length > 0"
-                            class="rounded-xl border border-sidebar-border/70 bg-background p-5 dark:border-sidebar-border"
-                        >
-                            <h3
-                                class="mb-4 text-lg font-semibold text-sidebar-foreground"
-                            >
-                                Popular Tags
-                            </h3>
-                            <div class="flex flex-wrap gap-2">
-                                <Link
-                                    v-for="tag in popularTags"
-                                    :key="tag.id"
-                                    :href="`/blog/tag/${tag.slug}`"
-                                    class="rounded-full border border-sidebar-border/70 px-3 py-1 text-sm transition-colors hover:bg-sidebar-accent dark:border-sidebar-border"
-                                    :class="{
-                                        'bg-sidebar-accent font-medium text-sidebar-accent-foreground':
-                                            currentTag?.id === tag.id,
-                                        'text-sidebar-foreground':
-                                            currentTag?.id !== tag.id,
-                                    }"
-                                >
-                                    {{ tag.name }}
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-                </aside>
+                    </aside>
+                </div>
             </div>
-        </div>
         </main>
     </div>
 </template>
