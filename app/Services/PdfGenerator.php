@@ -31,8 +31,13 @@ class PdfGenerator
             ->format('a4')
             ->name("{$post->slug}.pdf")
             ->withBrowsershot(function ($browsershot) {
-                $browsershot->noSandbox()
-                    ->setOption('args', ['--disable-web-security']);
+                $browsershot
+                    ->setChromePath('/ms-playwright/chromium*/chrome-linux/chrome')
+                    ->noSandbox()
+                    ->setOption('args', [
+                        '--disable-gpu',
+                        '--disable-dev-shm-usage',
+                    ]);
             })
             ->download();
     }
