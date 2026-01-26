@@ -3,14 +3,13 @@ FROM php:8.4-cli-bookworm
 WORKDIR /var/www/html
 
 # --------------------
-# System deps + Node 20 + Chromium
+# System deps + Chromium (Debian bookworm compatible)
 # --------------------
-# +++ ADD THIS +++
 RUN apt-get update && apt-get install -y \
     chromium \
     chromium-driver \
     fonts-liberation \
-    libasound2t64 \
+    libasound2 \
     libatk-bridge2.0-0 \
     libatk1.0-0 \
     libcups2 \
@@ -24,9 +23,8 @@ RUN apt-get update && apt-get install -y \
     libxdamage1 \
     libxrandr2 \
     xdg-utils \
-    --no-install-recommends \
- && rm -rf /var/lib/apt/lists/*
-
+    curl ca-certificates gnupg git unzip \
+    && rm -rf /var/lib/apt/lists/*
 
 # --------------------
 # PHP extensions
@@ -34,7 +32,23 @@ RUN apt-get update && apt-get install -y \
 COPY --from=mlocati/php-extension-installer:latest /usr/bin/install-php-extensions /usr/bin/
 
 RUN install-php-extensions \
-    mongodb redis intl mbstring zip gd exif opcache
+    mongodb \
+    redis \
+    intl \
+    mbstring \
+    zip \
+    gd \
+    exif \
+    opcache
+
+# --------------------
+# Node 20 (Vite / Puppeteer compatibility)
+# --------------------
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && node -v \
+    && npm -v \
+    && rm -rf /var/lib/apt/lists/*
 
 # --------------------
 # Composer
