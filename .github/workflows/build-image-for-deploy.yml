@@ -1,5 +1,4 @@
-name: build-prod-image
-
+name: Build and Push Production Image
 on:
   push:
     branches: [ main ]
