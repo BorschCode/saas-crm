@@ -1,9 +1,19 @@
 <?php
 
-ini_set('display_errors', '1');
-ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
+set_exception_handler(function ($e) {
+    echo "EXCEPTION:\n";
+    echo $e;
+    exit(1);
+});
+
+set_error_handler(function ($severity, $message, $file, $line) {
+    echo "ERROR:\n";
+    echo $message . " in $file:$line";
+    exit(1);
+});
 
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
