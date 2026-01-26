@@ -4,8 +4,6 @@ import vue from '@vitejs/plugin-vue';
 import laravel from 'laravel-vite-plugin';
 import { defineConfig } from 'vite';
 
-const isCI = process.env.CI === 'true';
-
 export default defineConfig({
     plugins: [
         laravel({
@@ -14,12 +12,9 @@ export default defineConfig({
             refresh: true,
         }),
         tailwindcss(),
-
-        !isCI &&
-            wayfinder({
-                formVariants: true,
-            }),
-
+        wayfinder({
+            formVariants: true,
+        }),
         vue({
             template: {
                 transformAssetUrls: {
@@ -28,5 +23,5 @@ export default defineConfig({
                 },
             },
         }),
-    ].filter(Boolean),
+    ],
 });
