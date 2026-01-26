@@ -1,47 +1,15 @@
-############################
-# 1️⃣ Frontend build stage
-############################
-FROM node:20-alpine AS frontend
-
-WORKDIR /app
-
-# Передаємо Vite env
-ARG APP_NAME
-ARG CI
-
-ENV APP_NAME=${APP_NAME}
-ENV CI=${CI}
-
-# Копіюємо тільки frontend-залежності
-COPY package.json package-lock.json ./
-
-RUN npm ci
-
-# Копіюємо frontend код
-COPY resources ./resources
-COPY vite.config.* .
-COPY tailwind.config.* .
-COPY postcss.config.* .
-COPY public ./public
-
-# Будуємо assets
-RUN npm run build
-
-
-############################
-# 2️⃣ PHP runtime stage
-############################
 FROM php:8.4-cli-bookworm
 
 WORKDIR /var/www/html
 
 # --------------------
-# System dependencies
+# System dependencies + Node
 # --------------------
 RUN apt-get update && apt-get install -y \
     git curl unzip \
     libpng16-16 libjpeg62-turbo libfreetype6 \
     libzip4 libicu72 \
+    nodejs npm \
     && rm -rf /var/lib/apt/lists/*
 
 # --------------------
@@ -65,16 +33,28 @@ RUN install-php-extensions \
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # --------------------
-# App source (backend)
+# App source
 # --------------------
 COPY . .
 
-# Копіюємо зібрані frontend assets
-COPY --from=frontend /app/public/build ./public/build
+# Git safety (Composer)
+RUN git config --global --add safe.directory /var/www/html
 
-RUN git config --global --add safe.directory /var/www/html \
- && composer install --no-dev --optimize-autoloader --no-interaction --no-cache \
- && php artisan optimize
+# --------------------
+# Install deps
+# --------------------
+RUN npm ci \
+ && composer install --no-dev --optimize-autoloader --no-interaction --no-cache
+
+# --------------------
+# BUILD FRONTEND (PHP вже є → Wayfinder працює)
+# --------------------
+RUN npm run build
+
+# --------------------
+# Laravel optimize
+# --------------------
+RUN php artisan optimize
 
 # --------------------
 # Runtime
