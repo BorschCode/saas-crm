@@ -10,6 +10,8 @@ use Inertia\Response;
 
 class BlogController extends Controller
 {
+    public const int DEFAULT_PER_PAGE = 12;
+
     public function index(): Response
     {
         $searchQuery = request('search');
@@ -23,7 +25,7 @@ class BlogController extends Controller
                     ->whereNotNull('published_at')
                     ->where('published_at', '<=', now())
                 )
-                ->paginate(12);
+                ->paginate(self::DEFAULT_PER_PAGE);
         } else {
             // Normal query when no search
             $posts = Post::query()
@@ -32,7 +34,7 @@ class BlogController extends Controller
                 ->whereNotNull('published_at')
                 ->where('published_at', '<=', now())
                 ->latest('published_at')
-                ->paginate(12);
+                ->paginate(self::DEFAULT_PER_PAGE);
         }
 
         $categories = Category::all()->map(function ($category) {
@@ -92,7 +94,7 @@ class BlogController extends Controller
             ->whereNotNull('published_at')
             ->where('published_at', '<=', now())
             ->latest('published_at')
-            ->paginate(12);
+            ->paginate(self::DEFAULT_PER_PAGE);
 
         $categories = Category::all()->map(function ($category) {
             $category->posts_count = Post::where('category_id', $category->id)->count();
@@ -118,7 +120,7 @@ class BlogController extends Controller
     {
         $tag = Tag::where('slug', $slug)->firstOrFail();
 
-        // For MongoDB, get all tag's posts and manually paginate
+        // MongoDB: фільтрація через колекцію
         $allPosts = Post::query()
             ->with(['category', 'user', 'tags'])
             ->where('is_published', true)
@@ -128,15 +130,18 @@ class BlogController extends Controller
             ->get()
             ->filter(fn ($post) => $post->tags->contains('id', $tag->id));
 
-        // Manual pagination
-        $perPage = 12;
-        $currentPage = request()->get('page', 1);
+        $perPage = self::DEFAULT_PER_PAGE;
+        $currentPage = request()->query('page', 1);
+
         $posts = new \Illuminate\Pagination\LengthAwarePaginator(
             $allPosts->forPage($currentPage, $perPage)->values(),
             $allPosts->count(),
             $perPage,
             $currentPage,
-            ['path' => request()->url(), 'query' => request()->query()]
+            [
+                'path' => request()->url(),
+                'query' => request()->query(),
+            ]
         );
 
         $categories = Category::all()->map(function ($category) {
@@ -145,11 +150,15 @@ class BlogController extends Controller
             return $category;
         });
 
-        $popularTags = Tag::all()->map(function ($tag) {
-            $tag->posts_count = $tag->posts()->count();
+        $popularTags = Tag::all()
+            ->map(function ($tag) {
+                $tag->posts_count = $tag->posts()->count();
 
-            return $tag;
-        })->sortByDesc('posts_count')->take(10)->values();
+                return $tag;
+            })
+            ->sortByDesc('posts_count')
+            ->take(10)
+            ->values();
 
         return Inertia::render('Blog/Index', [
             'posts' => $posts,

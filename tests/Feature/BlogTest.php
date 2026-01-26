@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BlogController;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
@@ -404,7 +405,7 @@ test('blog search maintains pagination', function () {
         ->assertInertia(fn ($page) => $page
             ->component('Blog/Index')
             ->where('searchQuery', 'Testing')
-            ->has('posts.data', 12)
+            ->has('posts.data', BlogController::DEFAULT_PER_PAGE)
             ->where('posts.current_page', 1)
             ->where('posts.last_page', 2));
 

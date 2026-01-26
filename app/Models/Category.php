@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use MongoDB\Laravel\Eloquent\Model;
 
 /**
- * @property mixed $id 5 occurrences
- * @property \Illuminate\Support\Carbon|null $created_at 5 occurrences
- * @property string|null $description 5 occurrences
- * @property string|null $name 5 occurrences
- * @property string|null $slug 5 occurrences
- * @property \Illuminate\Support\Carbon|null $updated_at 5 occurrences
+ * @property mixed $id 8 occurrences
+ * @property \Illuminate\Support\Carbon|null $created_at 8 occurrences
+ * @property string|null $description 8 occurrences
+ * @property string|null $name 8 occurrences
+ * @property string|null $slug 8 occurrences
+ * @property \Illuminate\Support\Carbon|null $updated_at 8 occurrences
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Post> $posts
  * @property-read int|null $posts_count
  *

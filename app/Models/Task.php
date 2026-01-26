@@ -10,20 +10,20 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use MongoDB\Laravel\Eloquent\Model;
 
 /**
- * @property mixed $id 147 occurrences
- * @property numeric|null $actual_hours 147 occurrences
- * @property \Illuminate\Support\Carbon|null $created_at 147 occurrences
- * @property string|null $description 147 occurrences
- * @property \Illuminate\Support\Carbon|null $due_date 147 occurrences
- * @property numeric|null $estimated_hours 147 occurrences
- * @property int|null $order 147 occurrences
- * @property string|null $priority 147 occurrences
- * @property string|null $project_id 147 occurrences
- * @property \Illuminate\Support\Carbon|null $start_date 147 occurrences
- * @property string|null $status 147 occurrences
- * @property string|null $team_id 147 occurrences
- * @property string|null $title 147 occurrences
- * @property \Illuminate\Support\Carbon|null $updated_at 147 occurrences
+ * @property mixed $id 164 occurrences
+ * @property numeric|null $actual_hours 164 occurrences
+ * @property \Illuminate\Support\Carbon|null $created_at 164 occurrences
+ * @property string|null $description 164 occurrences
+ * @property \Illuminate\Support\Carbon|null $due_date 164 occurrences
+ * @property numeric|null $estimated_hours 164 occurrences
+ * @property int|null $order 164 occurrences
+ * @property string|null $priority 164 occurrences
+ * @property string|null $project_id 164 occurrences
+ * @property \Illuminate\Support\Carbon|null $start_date 164 occurrences
+ * @property string|null $status 164 occurrences
+ * @property string|null $team_id 164 occurrences
+ * @property string|null $title 164 occurrences
+ * @property \Illuminate\Support\Carbon|null $updated_at 164 occurrences
  * @property-read \App\Models\User|null $assignee
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Comment> $comments
  * @property-read int|null $comments_count

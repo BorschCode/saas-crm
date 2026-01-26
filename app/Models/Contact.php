@@ -9,20 +9,20 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use MongoDB\Laravel\Eloquent\Model;
 
 /**
- * @property mixed $id 18 occurrences
- * @property string|null $client_id 18 occurrences
- * @property \Illuminate\Support\Carbon|null $created_at 18 occurrences
- * @property string|null $department 18 occurrences
- * @property string|null $email 18 occurrences
- * @property string|null $first_name 18 occurrences
- * @property bool|null $is_primary 18 occurrences
- * @property string|null $job_title 18 occurrences
- * @property string|null $last_name 18 occurrences
- * @property string|null $mobile 18 occurrences
- * @property string|null $notes 18 occurrences
- * @property string|null $phone 18 occurrences
- * @property string|null $team_id 18 occurrences
- * @property \Illuminate\Support\Carbon|null $updated_at 18 occurrences
+ * @property mixed $id 21 occurrences
+ * @property string|null $client_id 21 occurrences
+ * @property \Illuminate\Support\Carbon|null $created_at 21 occurrences
+ * @property string|null $department 21 occurrences
+ * @property string|null $email 21 occurrences
+ * @property string|null $first_name 21 occurrences
+ * @property bool|null $is_primary 21 occurrences
+ * @property string|null $job_title 21 occurrences
+ * @property string|null $last_name 21 occurrences
+ * @property string|null $mobile 21 occurrences
+ * @property string|null $notes 21 occurrences
+ * @property string|null $phone 21 occurrences
+ * @property string|null $team_id 21 occurrences
+ * @property \Illuminate\Support\Carbon|null $updated_at 21 occurrences
  * @property-read \App\Models\Client|null $client
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Deal> $deals
  * @property-read int|null $deals_count

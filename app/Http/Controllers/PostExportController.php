@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Services\PdfGenerator;
 use Illuminate\Contracts\Support\Responsable;
+use Symfony\Component\HttpFoundation\Response;
 
 class PostExportController extends Controller
 {
@@ -20,7 +21,7 @@ class PostExportController extends Controller
                      ($post->guest_session_id && session()->getId() === $post->guest_session_id);
 
         if (! $canAccess) {
-            abort(403, 'Unauthorized action');
+            abort(Response::HTTP_FORBIDDEN, 'Unauthorized action');
         }
 
         return $pdfGenerator->downloadFromPost($post);

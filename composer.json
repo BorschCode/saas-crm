@@ -11,16 +11,17 @@
         "filament/spatie-laravel-media-library-plugin": "^3.2",
         "filament/spatie-laravel-tags-plugin": "^3.2",
         "inertiajs/inertia-laravel": "^2.0",
-        "jenssegers/mongodb": "*",
         "laravel/fortify": "^1.30",
         "laravel/framework": "^12.0",
         "laravel/mcp": "^0.3.4",
         "laravel/scout": "^10.22",
         "laravel/tinker": "^2.10.1",
         "laravel/wayfinder": "^0.1.9",
+        "mongodb/laravel-mongodb": "^5.5",
         "neuron-core/neuron-ai": "^2.8",
         "smalot/pdfparser": "^2.12",
-        "spatie/laravel-pdf": "^1.8"
+        "spatie/laravel-pdf": "^1.8",
+        "tightenco/ziggy": "^2.6"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.16",

@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use MongoDB\Laravel\Eloquent\Model;
 
 /**
- * @property mixed $id 15 occurrences
- * @property \Illuminate\Support\Carbon|null $created_at 15 occurrences
- * @property string|null $name 15 occurrences
- * @property string|null $post_ids 15 occurrences
- * @property string|null $slug 15 occurrences
- * @property \Illuminate\Support\Carbon|null $updated_at 15 occurrences
+ * @property mixed $id 20 occurrences
+ * @property \Illuminate\Support\Carbon|null $created_at 20 occurrences
+ * @property string|null $name 20 occurrences
+ * @property string|null $post_ids 20 occurrences
+ * @property string|null $slug 20 occurrences
+ * @property \Illuminate\Support\Carbon|null $updated_at 20 occurrences
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Post> $posts
  * @property-read int|null $posts_count
  *

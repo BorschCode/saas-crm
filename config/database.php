@@ -122,7 +122,7 @@ return [
             'options' => array_filter([
                 'authSource' => env('DB_USERNAME') ? 'admin' : null,
             ]),
-            'dsn'      => env('MONGODB_URI'),
+            'dsn' => env('MONGODB_URI'),
         ],
 
     ],
@@ -182,6 +182,5 @@ return [
             'backoff_cap' => env('REDIS_BACKOFF_CAP', 1000),
         ],
     ],
-
 
 ];

@@ -17,7 +17,7 @@ use MongoDB\Laravel\Auth\User as Authenticatable;
  * @property string|null $current_team_id 6 occurrences
  * @property string|null $email 6 occurrences
  * @property \Illuminate\Support\Carbon|null $email_verified_at 6 occurrences
- * @property string|null $job_title 1 occurrences
+ * @property string|null $job_title 6 occurrences
  * @property string|null $name 6 occurrences
  * @property string|null $password 6 occurrences
  * @property string|null $remember_token 6 occurrences
