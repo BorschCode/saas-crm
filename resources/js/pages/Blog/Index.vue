@@ -96,9 +96,7 @@ const formatDate = (dateString: string) => {
 <template>
     <Head :title="pageTitle" />
 
-    <div
-        class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50"
-    >
+    <div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
         <WelcomeHeader :can-register="true" />
 
         <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -175,9 +173,7 @@ const formatDate = (dateString: string) => {
                                 </Link>
 
                                 <div class="flex flex-col gap-3 p-5">
-                                    <div
-                                        class="flex items-center gap-2 text-sm"
-                                    >
+                                    <div class="flex items-center gap-2 text-sm">
                                         <Link
                                             :href="`/blog/category/${post.category.slug}`"
                                             class="rounded-full bg-blue-100 px-3 py-1 font-medium text-blue-700"
@@ -189,11 +185,17 @@ const formatDate = (dateString: string) => {
                                         </span>
                                     </div>
 
-                                    <h2
-                                        class="text-xl font-semibold text-gray-900"
+                                    <!-- ✅ КЛІКАБЕЛЬНИЙ ЗАГОЛОВОК -->
+                                    <Link
+                                        :href="`/blog/${post.slug}`"
+                                        class="group"
                                     >
-                                        {{ post.title }}
-                                    </h2>
+                                        <h2
+                                            class="text-xl font-semibold text-gray-900 transition group-hover:text-blue-600"
+                                        >
+                                            {{ post.title }}
+                                        </h2>
+                                    </Link>
 
                                     <p
                                         v-if="post.excerpt"
@@ -230,14 +232,10 @@ const formatDate = (dateString: string) => {
                                 :disabled="!link.url"
                                 @click="
                                     link.url &&
-                                    router.get(
-                                        link.url,
-                                        {},
-                                        {
-                                            preserveState: true,
-                                            preserveScroll: true,
-                                        },
-                                    )
+                                    router.get(link.url, {}, {
+                                        preserveState: true,
+                                        preserveScroll: true,
+                                    })
                                 "
                                 v-html="link.label"
                                 class="min-w-[42px] rounded-lg border px-4 py-2 text-sm font-medium transition disabled:opacity-50"
@@ -253,13 +251,8 @@ const formatDate = (dateString: string) => {
                     <!-- SIDEBAR -->
                     <aside class="lg:col-span-4">
                         <div class="sticky top-6 flex flex-col gap-6">
-                            <!-- Categories -->
-                            <div
-                                class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm"
-                            >
-                                <h3
-                                    class="mb-4 text-lg font-semibold text-gray-900"
-                                >
+                            <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+                                <h3 class="mb-4 text-lg font-semibold text-gray-900">
                                     Categories
                                 </h3>
                                 <div class="flex flex-col gap-2">
@@ -270,21 +263,18 @@ const formatDate = (dateString: string) => {
                                         class="flex justify-between rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                     >
                                         <span>{{ c.name }}</span>
-                                        <span class="text-gray-400">{{
-                                            c.posts_count
-                                        }}</span>
+                                        <span class="text-gray-400">
+                                            {{ c.posts_count }}
+                                        </span>
                                     </Link>
                                 </div>
                             </div>
 
-                            <!-- Tags -->
                             <div
                                 v-if="popularTags.length"
                                 class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm"
                             >
-                                <h3
-                                    class="mb-4 text-lg font-semibold text-gray-900"
-                                >
+                                <h3 class="mb-4 text-lg font-semibold text-gray-900">
                                     Popular Tags
                                 </h3>
                                 <div class="flex flex-wrap gap-2">

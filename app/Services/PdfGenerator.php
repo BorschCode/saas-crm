@@ -31,7 +31,7 @@ class PdfGenerator
             ->format('a4')
             ->name("{$post->slug}.pdf")
             ->withBrowsershot(function ($browsershot) {
-                $browsershot->setChromePath('/usr/bin/chromium')
+                $browsershot
                     ->noSandbox()
                     ->setOption('args', [
                         '--disable-gpu',
