@@ -30,7 +30,10 @@ RUN apt-get update && apt-get upgrade -y \
         gnupg gosu curl ca-certificates zip unzip git supervisor \
         sqlite3 libcap2-bin libpng-dev python3 dnsutils \
         librsvg2-bin fswatch ffmpeg nano \
-        libasound2 libatk-bridge2.0-0 libatk1.0-0 libcups2 \
+            libasound2t64 \
+            libatk-bridge2.0-0 \
+            libatk1.0-0 \
+            libcups2 \
         libdbus-1-3 libdrm2 libgbm1 libnspr4 libnss3 \
         libx11-xcb1 libxcomposite1 libxdamage1 libxrandr2 \
         xdg-utils fonts-liberation \

@@ -31,8 +31,7 @@ class PdfGenerator
             ->format('a4')
             ->name("{$post->slug}.pdf")
             ->withBrowsershot(function ($browsershot) {
-                $browsershot
-                    ->setChromePath('/ms-playwright/chromium*/chrome-linux/chrome')
+                $browsershot->setChromePath('/usr/bin/chromium')
                     ->noSandbox()
                     ->setOption('args', [
                         '--disable-gpu',
