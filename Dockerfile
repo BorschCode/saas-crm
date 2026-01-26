@@ -7,7 +7,10 @@ WORKDIR /app
 
 # Передаємо Vite env
 ARG APP_NAME
-ENV VITE_APP_NAME="${APP_NAME}"
+ARG CI
+
+ENV APP_NAME=${APP_NAME}
+ENV CI=${CI}
 
 # Копіюємо тільки frontend-залежності
 COPY package.json package-lock.json ./
