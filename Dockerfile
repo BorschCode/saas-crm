@@ -54,11 +54,6 @@ RUN npm ci \
 # --------------------
 RUN npm run build
 
-# --------------------
-# Laravel optimize
-# --------------------
-RUN php artisan optimize:clear
-
 EXPOSE 10000
 
 CMD ["sh", "-c", "php artisan serve --host=0.0.0.0 --port=${PORT:-10000}"]
