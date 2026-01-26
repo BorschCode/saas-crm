@@ -57,7 +57,7 @@ RUN npm run build
 # --------------------
 # Laravel optimize
 # --------------------
-RUN php artisan optimize
+RUN php artisan optimize:clear
 
 EXPOSE 10000
 
