@@ -1,15 +1,44 @@
+############################
+# 1️⃣ Frontend build stage
+############################
+FROM node:20-alpine AS frontend
+
+WORKDIR /app
+
+# Передаємо Vite env
+ARG APP_NAME
+ENV VITE_APP_NAME="${APP_NAME}"
+
+# Копіюємо тільки frontend-залежності
+COPY package.json package-lock.json ./
+
+RUN npm ci
+
+# Копіюємо frontend код
+COPY resources ./resources
+COPY vite.config.* .
+COPY tailwind.config.* .
+COPY postcss.config.* .
+COPY public ./public
+
+# Будуємо assets
+RUN npm run build
+
+
+############################
+# 2️⃣ PHP runtime stage
+############################
 FROM php:8.4-cli-bookworm
 
 WORKDIR /var/www/html
 
 # --------------------
-# System deps
+# System dependencies
 # --------------------
 RUN apt-get update && apt-get install -y \
     git curl unzip \
     libpng16-16 libjpeg62-turbo libfreetype6 \
     libzip4 libicu72 \
-    nodejs npm \
     && rm -rf /var/lib/apt/lists/*
 
 # --------------------
@@ -33,23 +62,20 @@ RUN install-php-extensions \
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # --------------------
-# App source
+# App source (backend)
 # --------------------
 COPY . .
 
-# --------------------
-# Frontend build (❗ ВАЖЛИВО)
-# --------------------
-RUN npm ci \
-    && npm run build
+# Копіюємо зібрані frontend assets
+COPY --from=frontend /app/public/build ./public/build
+
+RUN git config --global --add safe.directory /var/www/html \
+ && composer install --no-dev --optimize-autoloader --no-interaction --no-cache \
+ && php artisan optimize
 
 # --------------------
-# Backend optimize
+# Runtime
 # --------------------
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-cache \
-    && php artisan key:generate --force \
-    && php artisan optimize
-
 EXPOSE 10000
 
 CMD ["sh", "-c", "php artisan serve --host=0.0.0.0 --port=${PORT:-10000}"]
