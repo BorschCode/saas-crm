@@ -43,6 +43,7 @@ use MongoDB\Laravel\Auth\User as Authenticatable;
  * @property-read int|null $teams_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TimeEntry> $timeEntries
  * @property-read int|null $time_entries_count
+ *
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|User addHybridHas(\Illuminate\Database\Eloquent\Relations\Relation $relation, string $operator = '>=', string $count = 1, string $boolean = 'and', ?\Closure $callback = null)
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|User aggregate($function = null, $columns = [])
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
@@ -69,6 +70,7 @@ use MongoDB\Laravel\Auth\User as Authenticatable;
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|User whereTwoFactorRecoveryCodes($value)
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|User whereTwoFactorSecret($value)
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|User whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class User extends Authenticatable

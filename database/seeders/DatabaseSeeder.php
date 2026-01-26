@@ -93,7 +93,7 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Innovation', 'slug' => 'innovation', 'description' => 'Cutting-edge ideas and breakthrough technologies'],
         ];
 
-        $categories = collect($categoryData)->map(fn($cat) => Category::create($cat));
+        $categories = collect($categoryData)->map(fn ($cat) => Category::create($cat));
 
         $tagNames = [
             'Laravel', 'PHP', 'Vue.js', 'React', 'TypeScript', 'JavaScript',
@@ -102,7 +102,7 @@ class DatabaseSeeder extends Seeder
             'Remote Work', 'Startup', 'SaaS', 'Open Source', 'Agile',
         ];
 
-        $tags = collect($tagNames)->map(fn($name) => Tag::create([
+        $tags = collect($tagNames)->map(fn ($name) => Tag::create([
             'name' => $name,
             'slug' => Str::slug($name),
         ]));

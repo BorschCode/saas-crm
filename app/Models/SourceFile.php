@@ -11,6 +11,7 @@ use MongoDB\Laravel\Eloquent\Model;
  * @property-read mixed $id
  * @property-read \App\Models\Post|null $post
  * @property-read \App\Models\User|null $uploader
+ *
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|SourceFile addHybridHas(\Illuminate\Database\Eloquent\Relations\Relation $relation, string $operator = '>=', string $count = 1, string $boolean = 'and', ?\Closure $callback = null)
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|SourceFile aggregate($function = null, $columns = [])
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|SourceFile getConnection()
@@ -22,6 +23,7 @@ use MongoDB\Laravel\Eloquent\Model;
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|SourceFile raw($value = null)
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|SourceFile search(\MongoDB\Builder\Type\SearchOperatorInterface|array $operator, ?string $index = null, ?array $highlight = null, ?bool $concurrent = null, ?string $count = null, ?string $searchAfter = null, ?string $searchBefore = null, ?bool $scoreDetails = null, ?array $sort = null, ?bool $returnStoredSource = null, ?array $tracking = null)
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|SourceFile vectorSearch(string $index, string $path, array $queryVector, int $limit, bool $exact = false, \MongoDB\Builder\Type\QueryInterface|array $filter = [], ?int $numCandidates = null)
+ *
  * @mixin \Eloquent
  */
 class SourceFile extends Model

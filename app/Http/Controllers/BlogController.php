@@ -11,6 +11,7 @@ use Inertia\Response;
 class BlogController extends Controller
 {
     public const int DEFAULT_PER_PAGE = 12;
+
     public function index(): Response
     {
         $searchQuery = request('search');

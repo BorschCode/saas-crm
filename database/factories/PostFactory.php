@@ -83,7 +83,7 @@ class PostFactory extends Factory
         $topic = str_replace(['Building ', 'The ', 'How to ', 'Creating ', 'Understanding '], '', $title);
         $content = str_replace('{topic}', $topic, fake()->randomElement($contentTemplates));
 
-        $excerpt = 'Discover ' . lcfirst($topic) . ' and learn how it can transform your approach to modern development. ' . fake()->sentence();
+        $excerpt = 'Discover '.lcfirst($topic).' and learn how it can transform your approach to modern development. '.fake()->sentence();
 
         return [
             'user_id' => \App\Models\User::factory(),

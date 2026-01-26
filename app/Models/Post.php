@@ -27,6 +27,7 @@ use MongoDB\Laravel\Eloquent\Model;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
  * @property-read int|null $tags_count
  * @property-read \App\Models\User|null $user
+ *
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Post addHybridHas(\Illuminate\Database\Eloquent\Relations\Relation $relation, string $operator = '>=', string $count = 1, string $boolean = 'and', ?\Closure $callback = null)
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Post aggregate($function = null, $columns = [])
  * @method static \Database\Factories\PostFactory factory($count = null, $state = [])
@@ -54,6 +55,7 @@ use MongoDB\Laravel\Eloquent\Model;
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Post whereTitle($value)
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Post whereUpdatedAt($value)
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Post whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class Post extends Model

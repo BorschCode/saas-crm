@@ -35,6 +35,7 @@ use MongoDB\Laravel\Eloquent\Model;
  * @property-read \App\Models\Team|null $team
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TimeEntry> $timeEntries
  * @property-read int|null $time_entries_count
+ *
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Project addHybridHas(\Illuminate\Database\Eloquent\Relations\Relation $relation, string $operator = '>=', string $count = 1, string $boolean = 'and', ?\Closure $callback = null)
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Project aggregate($function = null, $columns = [])
  * @method static \Database\Factories\ProjectFactory factory($count = null, $state = [])
@@ -65,6 +66,7 @@ use MongoDB\Laravel\Eloquent\Model;
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Project whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Project withTrashed(bool $withTrashed = true)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Project withoutTrashed()
+ *
  * @mixin \Eloquent
  */
 class Project extends Model

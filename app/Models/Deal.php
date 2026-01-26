@@ -28,6 +28,7 @@ use MongoDB\Laravel\Eloquent\Model;
  * @property-read \App\Models\Contact|null $contact
  * @property-read \App\Models\User|null $owner
  * @property-read \App\Models\Team|null $team
+ *
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Deal addHybridHas(\Illuminate\Database\Eloquent\Relations\Relation $relation, string $operator = '>=', string $count = 1, string $boolean = 'and', ?\Closure $callback = null)
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Deal aggregate($function = null, $columns = [])
  * @method static \Database\Factories\DealFactory factory($count = null, $state = [])
@@ -56,6 +57,7 @@ use MongoDB\Laravel\Eloquent\Model;
  * @method static \MongoDB\Laravel\Eloquent\Builder<static>|Deal whereValue($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal withTrashed(bool $withTrashed = true)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal withoutTrashed()
+ *
  * @mixin \Eloquent
  */
 class Deal extends Model
