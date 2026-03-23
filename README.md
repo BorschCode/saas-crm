@@ -116,6 +116,72 @@ Designed as a **real SaaS architecture**, not a demo.
 - Combine CRM + content + AI in one system
 - Apply clean code & scalable design principles
 
+
+## 📦 Installation (First Run with Docker Compose)
+
+### 1. Clone repository
+```bash
+git clone <repository-url>
+cd AccountPilot
+```
+
+### 2. Prepare environment file
+```bash
+cp .env.example .env
+```
+
+If needed, adjust ports in `.env` (default: `APP_PORT=8099`, `VITE_PORT=5117`).
+
+### 3. Build and start containers
+
+If you use Laravel Sail wrapper:
+```bash
+./vendor/bin/sail up -d --build
+```
+
+If Sail is not yet installed (first run), use Docker Compose directly:
+```bash
+docker compose up -d --build
+```
+
+This will:
+- Build PHP container
+- Start PostgreSQL
+- Start Node container
+- Create network and volumes
+
+### 4. Install backend dependencies (inside container)
+```bash
+docker compose exec filament-admin-app composer install
+```
+
+Or with Sail:
+```bash
+./vendor/bin/sail composer install
+```
+
+### 5. Generate application key
+```bash
+docker compose exec filament-admin-app php artisan key:generate
+```
+
+### 6. Run database migrations
+```bash
+docker compose exec filament-admin-app php artisan migrate
+```
+
+### 7. Install frontend dependencies
+```bash
+docker compose exec filament-admin-app npm install
+```
+
+### 8. Build frontend assets
+
+Production build:
+```bash
+docker compose exec filament-admin-app npm run build
+```
+
 ---
 
 ## 📄 License
